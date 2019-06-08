@@ -1,0 +1,120 @@
+\BOOKMARK [1][-]{section*.2}{Lesson 2: Introduction}{}% 1
+\BOOKMARK [2][-]{section*.3}{\(12\) Active Power}{section*.2}% 2
+\BOOKMARK [2][-]{section*.4}{\(13\) Static Power}{section*.2}% 3
+\BOOKMARK [2][-]{section*.5}{\(14\) Quiz: Active Power}{section*.2}% 4
+\BOOKMARK [3][-]{section*.6}{\(i\) 0.9 v, 1.8 GHz}{section*.5}% 5
+\BOOKMARK [3][-]{section*.7}{\(ii\) 1.5v, 3 GHz}{section*.5}% 6
+\BOOKMARK [2][-]{section*.8}{\(16\) Fabrication Yield}{section*.2}% 7
+\BOOKMARK [2][-]{section*.9}{\(17\) Fabrication Cost 2}{section*.2}% 8
+\BOOKMARK [1][-]{section*.10}{Lesson 3: Metrics and Evaluation}{}% 9
+\BOOKMARK [2][-]{section*.11}{\(2\) Performance}{section*.10}% 10
+\BOOKMARK [2][-]{section*.12}{\(3\) Quiz: Latency and Throughput}{section*.10}% 11
+\BOOKMARK [2][-]{section*.13}{\(4\) Comparing Performance}{section*.10}% 12
+\BOOKMARK [2][-]{section*.14}{\(5\) Quiz: Performance Comparison 1}{section*.10}% 13
+\BOOKMARK [2][-]{section*.15}{\(6\) Quiz: Performance Comparison 2}{section*.10}% 14
+\BOOKMARK [2][-]{section*.16}{\(7\) Speedup}{section*.10}% 15
+\BOOKMARK [2][-]{section*.17}{\(13\) Summarizing Performance}{section*.10}% 16
+\BOOKMARK [2][-]{section*.18}{\(14\) Quiz: Speedup Averaging}{section*.10}% 17
+\BOOKMARK [2][-]{section*.19}{\(15\) Iron Law of Performance}{section*.10}% 18
+\BOOKMARK [2][-]{section*.20}{\(16\) Quiz: Iron Law 1}{section*.10}% 19
+\BOOKMARK [2][-]{section*.21}{\(17\) Iron Law for Unequal Instruction Times}{section*.10}% 20
+\BOOKMARK [2][-]{section*.22}{Quiz: Iron Law 2}{section*.10}% 21
+\BOOKMARK [2][-]{section*.23}{\(19\) Amdahl's Law}{section*.10}% 22
+\BOOKMARK [2][-]{section*.24}{\(20\) Quiz: Amdahl's Law}{section*.10}% 23
+\BOOKMARK [2][-]{section*.25}{\(22\) Quiz: Amdahl's Law 2}{section*.10}% 24
+\BOOKMARK [3][-]{section*.26}{\(i\) Branch CPI 4 \0403}{section*.25}% 25
+\BOOKMARK [3][-]{section*.27}{\(ii\) Increase Clock Frequency 2 \0402.3 GHz}{section*.25}% 26
+\BOOKMARK [3][-]{section*.28}{\(iii\) Store CPI 3 \0402}{section*.25}% 27
+\BOOKMARK [2][-]{section*.29}{Lhamda's Law}{section*.10}% 28
+\BOOKMARK [2][-]{section*.30}{\(27 - 37\) Problem Set}{section*.10}% 29
+\BOOKMARK [1][-]{section*.31}{Lesson 4: Pipelining}{}% 30
+\BOOKMARK [2][-]{section*.32}{\(3\) Pipelining in a Processor}{section*.31}% 31
+\BOOKMARK [2][-]{section*.33}{\(4\) Quiz: Laundry Pipelining}{section*.31}% 32
+\BOOKMARK [2][-]{section*.34}{\(5\) Instruction Pipelining}{section*.31}% 33
+\BOOKMARK [2][-]{section*.35}{\(8\) Processor Pipeline Stalls and Flushes}{section*.31}% 34
+\BOOKMARK [2][-]{section*.36}{\(10\) Quiz: Control Dependencies}{section*.31}% 35
+\BOOKMARK [2][-]{section*.37}{\(12\) Quiz: Data Dependencies}{section*.31}% 36
+\BOOKMARK [2][-]{section*.38}{\(13\) Dependencies and Hazards}{section*.31}% 37
+\BOOKMARK [2][-]{section*.39}{\(14\) Quiz: Dependencies and Hazards}{section*.31}% 38
+\BOOKMARK [2][-]{section*.40}{\(15\) Handling Hazards}{section*.31}% 39
+\BOOKMARK [2][-]{section*.41}{\(16\) Quiz: Flushes, Stalls, and Forwarding}{section*.31}% 40
+\BOOKMARK [2][-]{section*.42}{\(17\) How Many Stages?}{section*.31}% 41
+\BOOKMARK [2][-]{section*.43}{\(20 - 30\) Problem Set}{section*.31}% 42
+\BOOKMARK [1][-]{section*.44}{Lesson 5: Branches}{}% 43
+\BOOKMARK [2][-]{section*.45}{\(3\) Branch Prediction Requirements}{section*.44}% 44
+\BOOKMARK [2][-]{section*.46}{\(4\) Branch Prediction Accuracy}{section*.44}% 45
+\BOOKMARK [2][-]{section*.47}{\(5\) Quiz: Branch Prediction Benefit}{section*.44}% 46
+\BOOKMARK [2][-]{section*.48}{\(6\) Performance with Not-taken Prediction}{section*.44}% 47
+\BOOKMARK [2][-]{section*.49}{Quiz: Multiple Predictions}{section*.44}% 48
+\BOOKMARK [2][-]{section*.50}{\(8\) Predict Not-Taken}{section*.44}% 49
+\BOOKMARK [2][-]{section*.51}{\(9\) Why We Need Better Prediction}{section*.44}% 50
+\BOOKMARK [2][-]{section*.52}{\(10\) Quiz: Predictor Impact}{section*.44}% 51
+\BOOKMARK [2][-]{section*.53}{\(12\) Better Prediction \205 How?}{section*.44}% 52
+\BOOKMARK [2][-]{section*.54}{\(13\) BTB \205 Branch Target Buffer}{section*.44}% 53
+\BOOKMARK [2][-]{section*.55}{\(14\) Realistic BTB}{section*.44}% 54
+\BOOKMARK [2][-]{section*.56}{\(15\) Quiz: BTB}{section*.44}% 55
+\BOOKMARK [2][-]{section*.57}{\(16\) Direction Predictor}{section*.44}% 56
+\BOOKMARK [2][-]{section*.58}{\(17 - 21\) Quiz: BTB and BHT}{section*.44}% 57
+\BOOKMARK [2][-]{section*.59}{\(22\) Problems with 1-Bit Prediction}{section*.44}% 58
+\BOOKMARK [2][-]{section*.60}{\(23\) 2-Bit Predictor}{section*.44}% 59
+\BOOKMARK [2][-]{section*.61}{\(25\) Quiz: 2BP}{section*.44}% 60
+\BOOKMARK [2][-]{section*.62}{\(26\) 1BP,2BP}{section*.44}% 61
+\BOOKMARK [2][-]{section*.63}{\(28\) 1-Bit History with 2-Bit Counters}{section*.44}% 62
+\BOOKMARK [2][-]{section*.64}{\(29\) Quiz: 1-Bit History}{section*.44}% 63
+\BOOKMARK [2][-]{section*.65}{\(30 - 31\) N-Bit History Predictors}{section*.44}% 64
+\BOOKMARK [2][-]{section*.66}{\(32\) Quiz: N-Bit History Predictor}{section*.44}% 65
+\BOOKMARK [2][-]{section*.67}{\(33\) Quiz: History Predictor}{section*.44}% 66
+\BOOKMARK [2][-]{section*.68}{\(34 - 36\) History with Shared Counters}{section*.44}% 67
+\BOOKMARK [2][-]{section*.69}{\(37\) PShare}{section*.44}% 68
+\BOOKMARK [2][-]{section*.70}{\(38\) Quiz: PShare vs. GShare}{section*.44}% 69
+\BOOKMARK [2][-]{section*.71}{\(40\) Tournament Predictor}{section*.44}% 70
+\BOOKMARK [2][-]{section*.72}{\(41\) Hierarchical Predictor}{section*.44}% 71
+\BOOKMARK [2][-]{section*.73}{\(43\) Quiz: Multi-Predictor}{section*.44}% 72
+\BOOKMARK [2][-]{section*.74}{\(45\) RAS}{section*.44}% 73
+\BOOKMARK [2][-]{section*.75}{\(46\) Quiz: RAS Full}{section*.44}% 74
+\BOOKMARK [2][-]{section*.76}{\(47\) But How Do We Know it's a RET}{section*.44}% 75
+\BOOKMARK [2][-]{section*.77}{\(49 - 53\) Problem Set}{section*.44}% 76
+\BOOKMARK [1][-]{section*.78}{Lesson 6: Predication}{}% 77
+\BOOKMARK [2][-]{section*.79}{\(2\) Prediction}{section*.78}% 78
+\BOOKMARK [2][-]{section*.80}{\(3\) If Conversion}{section*.78}% 79
+\BOOKMARK [2][-]{section*.81}{\(4\) Conditional Move}{section*.78}% 80
+\BOOKMARK [2][-]{section*.82}{\(5, 7\) Quiz: MOVZ, MOVN, and Performance}{section*.78}% 81
+\BOOKMARK [2][-]{section*.83}{\(8\) MOVc Summary}{section*.78}% 82
+\BOOKMARK [2][-]{section*.84}{\(9\) Full Predication HW Support}{section*.78}% 83
+\BOOKMARK [2][-]{section*.85}{\(10\) Full Predication Example}{section*.78}% 84
+\BOOKMARK [2][-]{section*.86}{\(11\) Quiz: Full Predication}{section*.78}% 85
+\BOOKMARK [2][-]{section*.87}{\(13 - 32\) Problem Set}{section*.78}% 86
+\BOOKMARK [1][-]{section*.88}{Lesson 7: ILP}{}% 87
+\BOOKMARK [2][-]{section*.89}{\(2\) ILP All in the Same Cycle}{section*.88}% 88
+\BOOKMARK [2][-]{section*.90}{\(3\) The Execute Stage}{section*.88}% 89
+\BOOKMARK [2][-]{section*.91}{\(6\) Quiz: Dependency}{section*.88}% 90
+\BOOKMARK [2][-]{section*.92}{\(7\) Removing False Dependencies}{section*.88}% 91
+\BOOKMARK [2][-]{section*.93}{\(8\) Duplicating Register Values}{section*.88}% 92
+\BOOKMARK [2][-]{section*.94}{\(9\) Register Renaming}{section*.88}% 93
+\BOOKMARK [2][-]{section*.95}{\(10\) RAT Example}{section*.88}% 94
+\BOOKMARK [2][-]{section*.96}{\(11\) Quiz: Register Renaming}{section*.88}% 95
+\BOOKMARK [2][-]{section*.97}{\(13\) Instruction Level Parallelism \(ILP\)}{section*.88}% 96
+\BOOKMARK [2][-]{section*.98}{\(14\) ILP Example}{section*.88}% 97
+\BOOKMARK [2][-]{section*.99}{\(15\) Quiz: ILP}{section*.88}% 98
+\BOOKMARK [2][-]{section*.100}{\(16\) ILP With Structural \046 Control Dependencies}{section*.88}% 99
+\BOOKMARK [2][-]{section*.101}{\(17\) ILP vs. IPC}{section*.88}% 100
+\BOOKMARK [2][-]{section*.102}{\(18\) Quiz: IPC \046 ILP}{section*.88}% 101
+\BOOKMARK [2][-]{section*.103}{\(21 - 24\) Problem Set}{section*.88}% 102
+\BOOKMARK [1][-]{section*.104}{Lesson 8: Instruction Scheduling}{}% 103
+\BOOKMARK [2][-]{section*.105}{\(2\) Improving IPC}{section*.104}% 104
+\BOOKMARK [2][-]{section*.106}{\(3\) Tomasulo's Algorithm}{section*.104}% 105
+\BOOKMARK [2][-]{section*.107}{\(4\) The Picture}{section*.104}% 106
+\BOOKMARK [2][-]{section*.108}{\(5\) Issue}{section*.104}% 107
+\BOOKMARK [2][-]{section*.109}{\(6\) Issue Examples}{section*.104}% 108
+\BOOKMARK [2][-]{section*.110}{\(7\) Quiz: Issue}{section*.104}% 109
+\BOOKMARK [2][-]{section*.111}{\(8\) Dispatch}{section*.104}% 110
+\BOOKMARK [2][-]{section*.112}{\(9\) More than 1 Instruction Ready}{section*.104}% 111
+\BOOKMARK [2][-]{section*.113}{\(10\) Quiz: Dispatch}{section*.104}% 112
+\BOOKMARK [2][-]{section*.114}{\(11\) Write Result \(Broadcast\)}{section*.104}% 113
+\BOOKMARK [2][-]{section*.115}{\(12\) More than 1 Broadcast}{section*.104}% 114
+\BOOKMARK [2][-]{section*.116}{\(13\) Broadcast Stale Results}{section*.104}% 115
+\BOOKMARK [2][-]{section*.117}{\(19\) Quiz: Tomasulo's Algorithm}{section*.104}% 116
+\BOOKMARK [2][-]{section*.118}{\(20\) Load \046 Store Instructions}{section*.104}% 117
+\BOOKMARK [2][-]{section*.119}{\(27\) Timing Example}{section*.104}% 118
+\BOOKMARK [2][-]{section*.120}{\(28 - 29\) Quiz: Tomasulo Timing}{section*.104}% 119
+\BOOKMARK [2][-]{section*.121}{\(31 - 35\) Problem Set}{section*.104}% 120

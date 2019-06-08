@@ -1,0 +1,1861 @@
+\documentclass[letter,12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage[hidelinks]{hyperref}
+\usepackage[titles]{tocloft}
+\usepackage{placeins}
+\usepackage{courier}
+\usepackage{multirow, multicol}
+
+\renewcommand*{\cftdot}{}
+\cftpagenumbersoff{subsection}
+\cftpagenumbersoff{subsubsection}
+
+\newcommand{\sect}[1]{
+\pagebreak
+\FloatBarrier
+\section*{#1}
+\addcontentsline{toc}{section}{\protect\numberline{}#1}%
+}
+\newcommand{\subsect}[1]{
+\FloatBarrier
+\subsection*{#1}
+\addcontentsline{toc}{subsection}{\protect\numberline{}#1}%
+}
+\newcommand{\subsubsect}[1]{
+\FloatBarrier
+\subsubsection*{#1}
+\addcontentsline{toc}{subsubsection}{\protect\numberline{}#1}%
+}
+\newcommand{\eq}[1]{
+\begin{equation}
+\begin{aligned}
+#1
+\end{aligned}
+\end{equation}
+}
+\newcommand{\img}[1]{
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.5\linewidth]{#1}
+\end{center}
+\end{figure}
+}
+\newcommand{\bullets}[1]{
+\begin{itemize}
+#1
+\end{itemize}
+}
+\newcommand{\enum}[1]{
+\begin{enumerate}
+#1
+\end{enumerate}
+}
+\newcommand{\cols}[2]{
+\begin{multicols}{2}
+#1
+
+\columnbreak
+
+#2
+\end{multicols}
+}
+\newcommand{\tabl}[2]{
+\begin{center}
+\begin{tabular}{ | #1 | }
+\hline
+#2
+\hline
+\end{tabular}
+\end{center}
+}
+
+\begin{document}
+
+\title{Advanced Operating Systems Notes}
+\author{Madison Hanberry}
+\maketitle
+
+\pagebreak
+
+\tableofcontents
+
+\sect{Lesson 2: Introduction}
+
+\subsect{(12) Active Power}
+
+\eq{
+P = \frac{1}{2} \times v^2 \times f \times \alpha
+}
+
+$C$: Capacitance ($\sim$ Chip area)
+
+$v^2$: Power supply voltage
+
+$f$: Frequency
+
+$\alpha$: Activity factor (\% of transistors active in any given clock cycle)
+
+\subsect{(13) Static Power}
+
+Decreasing \emph{dynamic} power ($v \downarrow$) increases \emph{static} power (increases power leakage).
+
+\img{figures/lesson2_13.png}
+
+\subsect{(14) Quiz: Active Power}
+
+\eq{
+P &= 30 W\ at\ 1.0 v, 2\ GHz \\
+30 &= \frac{1}{2} C \times (1.0)^2 \times 2 \alpha \\
+30 &= C \alpha
+}
+
+\subsubsect{(i) $0.9 v, 1.8\ GHz$}
+
+\eq{
+P &= \frac{1}{2} (30) (0.9)^2 \times 1.8 \\
+P &= 21.87
+}
+
+\subsubsect{(ii) $1.5v, 3\ GHz$}
+
+\eq{
+P &= \frac{1}{2} (30) (1.5)^2 \times 3 \\
+P &= 101.25
+}
+
+\subsect{(16) Fabrication Yield}
+
+\eq{
+Yield = \frac{Working\ Chips}{Chips\ on\ Wafer}
+}
+
+Yield decreases as Chip size decreases relative to the wafer size.
+
+\subsect{(17) Fabrication Cost 2}
+
+\eq{
+Chip\ Cost = \frac{Wafer\ Cost}{\#\ of\ Good\ Chips/Wafer}
+}
+
+\sect{Lesson 3: Metrics and Evaluation}
+
+\subsect{(2) Performance}
+
+\bullets{
+\item
+Latency (start $\rightarrow$ Done)
+\item
+Throughput (\# / second)
+}
+
+\eq{
+	Throughput = \frac{1}{Latency}
+}
+
+\subsect{(3) Quiz: Latency and Throughput}
+
+\bullets{
+\item
+2 servers
+\item
+A server takes 1 msec to process an order
+}
+
+\eq{
+Throughput &= 2000\ orders/sec \\
+Latency &= 1\ msec
+}
+
+\subsect{(4) Comparing Performance}
+
+\eq{
+Speedup &= N \\
+N &= \frac{Speed(x)}{Speed(y)} = \frac{Latency(y)}{Latency(x)} = \frac{Throughput(x)}{Throughput(y)}
+}
+
+\subsect{(5) Quiz: Performance Comparison 1}
+
+\bullets{
+\item
+Laptop takes 4 hours to compress video
+\item
+New laptop takes 10 minutes
+}
+
+\eq{
+Speedup = \frac{(4 \times 60)}{10} = 24
+}
+
+\subsect{(6) Quiz: Performance Comparison 2}
+
+The new laptop broke, so you have to go back to using the slower laptop.
+
+\eq{
+Speedup = \frac{10}{(4 \times 60)} = 0.042
+}
+
+\subsect{(7) Speedup}
+
+\eq{
+Speedup > 1 &\Rightarrow Improved\ Performance \\
+Speedup < 1 &\Rightarrow Worse\ Performance \\
+Performance &\sim Throughput \\
+Performance &\sim \frac{1}{Latency}
+}
+
+\subsect{(13) Summarizing Performance}
+
+Use the \emph{geometric mean} instead of the \emph{arithmetic mean} for comparing speedups.
+
+\img{figures/lesson3_13.png}
+
+\subsect{(14) Quiz: Speedup Averaging}
+
+\bullets{
+\item
+Speedup of 2
+\item
+Speedup of 8
+}
+
+\eq{
+Overall\ Speedup = \sqrt{2 \times 8} = 4
+}
+
+\subsect{(15) Iron Law of Performance}
+
+\eq{
+CPU\ Time &= \#\ of\ Instructions \\
+&\times Cycles\ per\ Instruction \times Clock\ Cycle\ Time
+}
+
+\subsect{(16) Quiz: Iron Law 1}
+
+\bullets{
+\item
+3 Billion Instructions
+\item
+2 Cycles / Instruction
+\item
+Processor Clock is 3 GHz
+}
+
+\eq{
+	Execution\ Time = 3\ billion \times 2 \times \frac{1}{3\ billion} = 2\ sec
+}
+
+\subsect{(17) Iron Law for Unequal Instruction Times}
+
+\eq{
+CPU\ Time = \left(\sum_{i} = IC_i \times CPI_i\right) \times frequency
+}
+
+\subsect{Quiz: Iron Law 2}
+
+\bullets{
+\item
+10 billion branches (CPI = 4)
+\item
+15 billion loads (CPI = 2)
+5 billion stores (CPI = 3)
+\item
+20 billion integer adds (CPI = 1)
+\item
+Clock at 4 GHz
+}
+
+\eq{
+Execution\ Time = \frac{10b \times 4 + 15b \times 2 + 5b \times 3 + 20b \times 1}{4b} = 26.25\ sec
+}
+
+\subsect{(19) Amdahl's Law}
+
+Calculates the overall speedup when a portion of a program is enhanced.
+
+\eq{
+Frac_{ENH} &= \%\ of\ original\ execution\ time\ that\ is\ af\!fected\ by\ the\ enhancement \\
+Speedup &= \frac{1}{(1 - Frac_{ENH}) + \frac{Frac_{ENH}}{Speedup_{ENH}}}
+}
+
+\subsect{(20) Quiz: Amdahl's Law}
+
+\bullets{
+\item
+50 billion instructions
+\item
+2 GHz
+\item
+Improve branch from 4 to 2 CPI
+}
+
+\img{figures/lesson3_20.png}
+
+\eq{
+Frac_{ENH} &= \frac{0.2 \times 4}{0.4 \times 1 + 0.2 \times 4 + 0.3 \times 2 + 0.1 \times 3} \approx 0.381 \\
+Speedup &= \frac{1}{(1 - 0.381) + \frac{0.381}{\frac{4}{2}}} \approx 1.24
+}
+
+\pagebreak
+
+\subsect{(22) Quiz: Amdahl's Law 2}
+
+\img{figures/lesson3_22.png}
+
+\subsubsect{(i) Branch CPI 4 $\rightarrow$ 3}
+
+\eq{
+Speedup = \frac{1}{0.8 + \frac{0.2}{4/3}} = 1.05
+}
+
+\subsubsect{(ii) Increase Clock Frequency 2 $\rightarrow$ 2.3 GHz}
+
+\eq{
+Speedup = \frac{1}{0 + \frac{1}{2.3/2}} = 1.15
+}
+
+\subsubsect{(iii) Store CPI 3 $\rightarrow$ 2}
+
+\eq{
+Speedup = \frac{1}{0.9 + \frac{0.1}{3/2}} = 1.034
+}
+
+\pagebreak
+
+\subsect{Lhamda's Law}
+
+\bullets{
+\item
+Amdahl: Make common case fast
+\item
+Lhamda: Do not mess up uncommon case too badly
+}
+
+Example
+
+\eq{
+Speedup = \frac{1}{\frac{0.1}{0.1} + \frac{0.9}{2}} = 0.7
+}
+
+\subsect{(27 - 37) Problem Set}
+
+\sect{Lesson 4: Pipelining}
+
+\subsect{(3) Pipelining in a Processor}
+
+\img{figures/lesson4_3.png}
+
+\subsect{(4) Quiz: Laundry Pipelining}
+
+\bullets{
+\item
+Wash (1 hour) $\rightarrow$ Dry (1 hour) $\rightarrow$ Fold (1 hour)
+\item
+10 loads of laundry
+}
+
+\eq{
+No\ Pipelining &\Rightarrow 3 \times 10\ hours = 30\ hours \\
+With\ Pipelining &\Rightarrow 1 \times 3\ hours + 9 \times 1\ hour = 12\ hours
+}
+
+\subsect{(5) Instruction Pipelining}
+
+\bullets{
+\item
+5-stage pipeline (1 cycle/stage)
+\item
+10 instructions
+}
+
+\eq{
+No\ Pipelining \Rightarrow 10 \times 5\ cycles = 50\ cycles \\
+With\ Pipelining \Rightarrow 1 \times 5\ cycles + 9 \times 1\ cycle = 14\ cycles
+}
+
+\pagebreak
+
+\subsect{(8) Processor Pipeline Stalls and Flushes}
+
+\img{figures/lesson4_8.png}
+
+\subsect{(10) Quiz: Control Dependencies}
+
+\bullets{
+\item
+25\% of all instructions are taken branches with jumps
+\item
+10-stage pipeline
+\item
+Correct target for branch/jump computed in $6^{th}$ stage
+}
+
+\eq{
+Actual\ CPI = 0.75 + 0.25 \times 6 = 2.25
+}
+
+subsect{(11) Data Dependencies}
+
+\bullets{
+\item
+Read after write $\rightarrow$ True Dependency
+\item
+Write after write and write after read $\rightarrow$ False Dependency
+}
+
+\subsect{(12) Quiz: Data Dependencies}
+
+I1: MUL R1,R2,R3 \\
+I2: ADD R4,R4,R1 \\
+I3: MUL R1,R5,R6 \\
+I4: SUB R4,R4,R1
+
+\tabl{c | c | c | c}{
+& RAW & WAR & WAW \\ \hline
+I1 $\rightarrow$ I2 & $\checkmark$ & - & - \\ \hline
+I1 $\rightarrow$ I3 & - & - & $\checkmark$ \\ \hline
+I1 $\rightarrow$ I4 & - & - & - \\ \hline
+I2 $\rightarrow$ I3 & - & $\checkmark$ & - \\
+}
+
+\subsect{(13) Dependencies and Hazards}
+
+\bullets{
+\item
+Dependencies - Instructions in a program that share the same registers.
+\item
+Hazards - Dependencies that can result in incorrect execution.
+}
+
+\subsect{(14) Quiz: Dependencies and Hazards}
+
+\tabl{l | c | c}{
+ADD R1,R2,R3 & Dependency? & Hazard? \\ \hline
+SUB R5,R1,R4 & $\checkmark$ & $\checkmark$ \\ \hline
+DIV R6,R1,R7 & $\checkmark$ & - \\ \hline
+MUL R7,R1,R8 & $\checkmark$ & - \\
+}
+
+\subsect{(15) Handling Hazards}
+
+\bullets{
+\item
+Detect hazardous situations
+\bullets{
+\item
+Flush dependent instructions
+\item
+Stall dependent instructions
+\item
+Fix values read by dependent instructions
+}
+}
+
+\subsect{(16) Quiz: Flushes, Stalls, and Forwarding}
+
+\eq{
+Fetch \rightarrow Read \rightarrow ALU/BR \rightarrow Mem \rightarrow Wr
+}
+
+\tabl{c  l | c | c | c}{
+& BNE R1,R0,Label & Flush & Stall & Forward \\ \hline
+& ADD R4,R5,R6 & \multirow{2}{*}{$\checkmark$} & \multirow{2}{*}{-} & \multirow{2}{*}{-} \\
+& SUB R5,R4,R3 & & & \\ \hline
+& MUL R1,R2,R3 & \multirow{2}{*}{-} & \multirow{2}{*}{-} & \multirow{2}{*}{$\checkmark$} \\
+Label: & LW R1,0(R1) & & & \\ \hline
+& ADD R1,R1,R1 & - & $\checkmark$ & $\checkmark$ \\
+}
+
+\pagebreak
+
+\subsect{(17) How Many Stages?}
+
+\bullets{
+\item
+Ideal CPI = 9
+\item
+More stages means:
+\bullets{
+\item
+$More\ Hazards \Rightarrow CPI \uparrow$
+\item
+$Less\ Work/Stage \Rightarrow Cycle Time \downarrow$
+}
+}
+
+\eq{
+Exe\ Time &= \#Inst \times Cycle\ Time \\
+\#\ Stages &\Rightarrow Balance\ CPI\ \&\ Cycle\ Time \\
+Performance &\Rightarrow 30 - 40\ stages \\
+Performance + Power &\Rightarrow 10 - 15\ stages
+}
+
+\img{figures/lesson4_17.png}
+
+\subsect{(20 - 30) Problem Set}
+
+\sect{Lesson 5: Branches}
+
+\subsect{(3) Branch Prediction Requirements}
+
+\bullets{
+\item
+Know only PC of instruction
+\bullets{
+\item
+What is the PC of the next instruction to fetch
+}
+\item
+Must Correctly Guess:
+\bullets{
+\item
+Is this a taken branch?
+\item
+If taken, what is the target PC?
+}
+}
+
+\subsect{(4) Branch Prediction Accuracy}
+
+\eq{
+CPI = 1 + \frac{mispreds}{inst} \times \frac{penalty}{mispred}
+}
+
+\bullets{
+\item
+20\% of all instructions are branches
+}
+
+\tabl{c | c | c}{
+Accuracy $\downarrow$ & Resolve BR in 3$^{rd}$ Stage & Resolve BR in 10$^{th}$ Stage \\ \hline
+50\% for BR & $1 + 0.5 \times 0. \times 2$ & $1 + 0.5 + 0.2 \times 9$ \\
+100\% for other & 1.2 & 1.9 \\ \hline
+90\% for BR & $1 + 0.1 \times 0.2 \times 2$ & $1 + 0.1 \times 0.2 \times 9$ \\
+100\% for all other & 1.04 & 1.18 \\ \hline
+Speedup & 1.15 & 1.61 \\
+}
+
+\pagebreak
+
+\subsect{(5) Quiz: Branch Prediction Benefit}
+
+\bullets{
+\item
+5 stage pipeline
+\item
+Branch resolved in 3$^{rd}$ stage
+\item
+Fetch nothing until sure what to frtch
+\item
+Execute many iterations of:
+}
+
+\tabl{l | c | c}{
+LOOP: & Cost No Pred & Perfect Pred \\ \hline
+ADD R1,R1,-1 & 2 & 1 \\ \hline
+ADD R2,R2,R2 & 2 & 1 \\ \hline
+BNEZ R1,LOOP & 3 & 1 \\ \hline
+Total & 7 & 3 \\
+}
+
+\eq{
+Speedup = \frac{7}{3} \approx 2.33
+}
+
+\subsect{(6) Performance with Not-taken Prediction}
+
+\bullets{
+\item
+Refuse to predict
+\bullets{
+\item
+Branch: 3 cycles
+\item
+Non-branch: 2 cycles
+}
+\item
+Predict not-taken:
+\bullets{
+\item
+Branch: 1 or 3 cycles
+\item
+Non-branch: 1 cycle
+}
+}
+
+\pagebreak
+
+\subsect{Quiz: Multiple Predictions}
+
+\eq{
+	Fetch \rightarrow Decode \rightarrow ALU\ (BR\ Resolved) \rightarrow Mem \rightarrow WR
+}
+
+\bullets{
+\item
+Using not-taken predictor
+}
+
+\noindent
+BNE R1,R2,LABEL A \quad (Taken) \\
+BNE R1,R3,LABEL B \quad (Taken) \\
+A \\
+B \\
+C \\
+LABEL A: \\
+X \\
+Y \\
+LABEL B: \\
+Z
+
+\eq{
+Cycles\ Wasted\ on\ Mispredictions = 2
+}
+
+\subsect{(8) Predict Not-Taken}
+
+\bullets{
+\item
+Increment PPC
+\item
+20\% of instructions are branches
+\item
+60\% of branches are taken
+\item
+Correct: 80\% + 8\%, \quad Incorrect: 12\%
+}
+
+\eq{
+CPI = 1 + 0.12 \times Penalty
+}
+
+\subsect{(9) Why We Need Better Prediction}
+
+\tabl{c | c | c | c}{
+& Not Taken (88\%) & Better (99\%) & Speedup \\ \hline
+5-stage pipe & $1 + 0.12 \times 2$ & $1 + 0.01 \times 2$ & \multirow{2}{*}{1.22} \\
+(3$^{rd}$ stage) & 1.24 & 1.02 & \\ \hline
+14-stage & $1 + 0.12 \times 10$ & $1 + 0.01 \times 10$ & \multirow{2}{*}{2} \\
+(11$^{th}$ stage) & 2.2 & 1.1 & \\ \hline
+11$^{th}$ stage & $0.25 + 0.12 \times 10$ & $0.25 + 0.01 \times 10$ & \multirow{2}{*}{4.14} \\
+4 inst/cycle & 1.45 & 0.35 & \\
+}
+
+\subsect{(10) Quiz: Predictor Impact}
+
+\bullets{
+\item
+Pentium 4 "Prescott":
+\bullets{
+\item
+FETCH, ... 29 stages ... , Resolve branches
+\item
+Branch prediction
+\item
+Multiple instruction/cycle
+}
+\item
+Program:
+\bullets{
+\item
+20\% of instructions are branches
+\item
+1\% if branches are mispredicted
+\item
+CPI = 0.5
+}
+}
+
+Perfect branch predictor:
+\eq{
+CPI = 0.5 - 0.2 \times 0.01 \times 30 = 0.44
+}
+
+If 2\% of branches are mispredicted:
+\eq{
+CPI = 0.44 + 0.2 \times 0.02 \times 30 = 0.56
+}
+
+\subsect{(12) Better Prediction -- How?}
+
+\eq{
+PC_{next} = f(PC_{now}, History[PC_{now}])
+}
+
+\subsect{(13) BTB -- Branch Target Buffer}
+
+\img{figures/lesson5_13.png}
+
+\subsect{(14) Realistic BTB}
+
+\bullets{
+\item
+Map least significant bits in $PC_{now}$ to an index in the BTB
+}
+
+\subsect{(15) Quiz: BTB}
+
+\bullets{
+\item
+BTB has 1024 entries
+\item
+Fixed-size 4-byte instructions, word-aligned
+\item
+32-bit address
+\item
+$PC = 0x0000AB0C$
+}
+
+\eq{
+BTB\ Index = 10leastSigUniqBits(PC) = 0b1011000011 = 0x2C3
+}
+
+\subsect{(16) Direction Predictor}
+
+\img{figures/lesson5_16.png}
+
+\pagebreak
+
+\subsect{(17 - 21) Quiz: BTB and BHT}
+
+\bullets{
+\item
+BHT: 16 entries, perfect prediction
+\item
+BTB: 4 entries, perfect prediction
+}
+
+\scriptsize
+\tabl{l r l | c | c | c | c | c}{
+& & & & & & & Missed \\
+& & & Times & & Times & BTB & Preds. \\
+& & & BHT & BHT & BTB & Entry & if 1-bit \\
+0xC000 & & MOV R2,100 & Accessed & Entry & Accessed & Used & BHT \\ \hline
+0xC004 & & MOV R1,0 & 1 & 0 & 0 & & \\ \hline
+0xC008 & LOOP: & BEQ R1,R2,DONE & 101 & 2 & 1 & 2 & 1 \\ \hline
+0xC00C & & ADD R4,R3,R1 & 100 & 3 & 0 & & \\ \hline
+0xC010 & & LW R4,0(R4) & 100 & 4 & 0 & & \\ \hline
+0xC014 & & ADD R5,R5,R4 & 100 & 5 & 0 & & \\ \hline
+0xC018 & & ADDR1,R1,1 & 100 & 6 & 0 & & \\ \hline
+0xC01C & & MOV R1,0 & 100 & 7 & 100 & 3 & 1 \\ \hline
+0xC020 & DONE: & & & & & & \\
+}
+\normalsize
+
+\subsect{(22) Problems with 1-Bit Prediction}
+
+\bullets{
+\item
+Predicts well:
+\bullets{
+\item
+Always taken
+\item
+Always not taken
+\item
+$Taken >>> Not\ Taken$
+\item
+$Taken <<< Not\ Taken$
+}
+\item
+Not so well:
+\bullets{
+\item
+$Taken > Not\ Taken$
+\item
+$Not\ Taken > Taken$
+\item
+Short loop
+}
+\item
+Pretty bad:
+\bullets{
+\item
+$Taken \approx Not\ Taken$
+}
+}
+
+\eq{
+Each\ Anomoly \Rightarrow Two\ Mispredictions
+}
+
+\subsect{(23) 2-Bit Predictor}
+
+\bullets{
+\item
+00: Strong Not Taken
+\item
+01: Weak Not Taken
+\item
+10: Weak Taken
+\item
+11: Strong Taken
+}
+
+\img{figures/lesson5_23.png}
+
+\subsect{(25) Quiz: 2BP}
+
+\bullets{
+\item
+2-bit predictor
+\item
+Start in strong not-taken state
+\item
+A sequence always resulting in incorrect prediction:
+\center{
+T T N T N ...
+}
+}
+
+\subsect{(26) 1BP,2BP}
+
+\bullets{
+\item
+$1BP \rightarrow 2BP$ \quad 3BP? \quad 4BP?
+\bullets{
+\item
+Bad: Cost $\uparrow$
+\item
+Good: When "anomalous" outcomes come in streaks
+\bullets{
+\item
+How often does this happen?
+}
+}
+\item
+Stay with 2BP, maybe 3BP
+}
+
+\subsect{(28) 1-Bit History with 2-Bit Counters}
+
+\tabl{c | c | c | c}{
+State & Pred & Outcome & Correct? \\ \hline
+(0, SN, SN) & N & T & $\times$ \\ \hline
+(1, WN, SN) & N & N & $\checkmark$ \\ \hline
+(0, WN, SN) & N & T & $\times$ \\ \hline
+(1, WT, SN) & N & N & $\checkmark$ \\ \hline
+(0, WT, SN) & T & T & $\checkmark$ \\ \hline
+(1, ST, SN) & N & N & $\checkmark$ \\ \hline
+(0, ST, SN) & T & T & $\checkmark$ \\
+}
+
+\subsect{(29) Quiz: 1-Bit History}
+
+\bullets{
+\item
+1-Bit history (Start 0)
+\item
+2-BC/history (Start SN)
+\item
+(NNT)*
+\item
+Continues for 100 repitions
+}
+
+\eq{
+\#\ Mispredictions = 100
+}
+
+\subsect{(30 - 31) N-Bit History Predictors}
+
+\bullets{
+\item
+Works for all patterns of $length \leq N + 1$
+\item
+Costs $N + 2 \times 2^{N}$ per entry
+\item
+Most BCs are wasted
+}
+
+\pagebreak
+
+\subsect{(32) Quiz: N-Bit History Predictor}
+
+\bullets{
+\item
+N-Bit history, 2BCs/History
+\item
+Need 1024 entries
+}
+
+\tabl{c | c | c | c}{
+& & & \# of 2BCs \\
+& & & used for \\
+& cost(bits) & (NNNT)* & (NT)* \\ \hline
+N = 1 & $5 \times 1024$ & bad & 2 \\ \hline
+N = 4 & $(4 + 2 \times 2^4) \times 1024$ & good & 2 \\ \hline
+N = 8 & 532,480 & good & 2 \\ \hline
+N = 16 & 134,234,112 & good & 2 \\
+}
+
+\subsect{(33) Quiz: History Predictor}
+
+for(int i = 0; i != 8; i++) \\
+\indent for(int j = 0; j != 8; j++) \\
+\indent \indent doSomething();
+
+\bullets{
+\item
+The history predictor needs at least 4 entries
+\item
+Each entry needs at least an 8-bit history (246 2-bit counters)
+}
+
+\subsect{(34 - 36) History with Shared Counters}
+
+\img{figures/lesson5_34.png}
+
+\eq{
+TTTT &\Rightarrow 1111 \Rightarrow 1\ counter \\
+NNNN &\Rightarrow 0000 \Rightarrow 1\ counter \\
+NTNT &\Rightarrow 010101\ or\ 101010 \Rightarrow 2\ counters \\
+NNNNT &\Rightarrow 16 \times H \Rightarrow 16\ counters
+}
+
+\subsect{(37) PShare}
+
+PShare
+
+\bullets{
+\item
+Private history
+\item
+Shared counters
+\item
+Good for:
+\bullets{
+\item
+Even-odd
+\item
+8-iteration loop
+}
+}
+
+\noindent
+GShare
+
+\bullets{
+\item
+Global history
+\item
+Shared counters
+\item
+Good for:
+\bullets{
+\item
+Correlated branches
+}
+}
+
+\subsect{(38) Quiz: PShare vs. GShare}
+
+for(int i = 1000; i != 0; i--) \\
+\indent if(i \% 2) \\
+\indent \indent n += i; \\
+\indent \indent \indent $\Downarrow$
+
+\noindent
+LOOP: \\
+BEQ R1,0,EXIT \\
+AND R2,R1,1 \\
+BEQ R2,0,EVEN \\
+ADD R3,R3,R1 \\
+ADD R1,R1,-1 \\
+B LOOP \\
+EXIT:
+
+\eq{
+History\ for\ PShare &= 1 \\
+History\ for\ GShare &= 3
+}
+
+\subsect{(40) Tournament Predictor}
+
+\bullets{
+\item
+Two Predictors
+\bullets{
+\item
+One better for branches x, y, z
+\item
+Other better for branches a, b, c
+}
+}
+
+\img{figures/lesson5_40.png}
+
+\subsect{(41) Hierarchical Predictor}
+
+\bullets{
+\item
+Tournament
+\bullets{
+\item
+2 good predictors
+\item
+update both on each dicision
+}
+\item
+Hierarchical
+\bullets{
+\item
+1 good, 1 ok predictor
+\item
+Update ok-predictor on each decision
+\item
+Update good-predictor onlu if the ok-predictor is not sufficient.
+}
+}
+
+\subsect{(43) Quiz: Multi-Predictor}
+
+\bullets{
+\item
+2 BP works fine for 95\% of instructions
+\item
+PShare works fine for the same 95\%, plus 2\% more
+\item
+GShare works fine for the same 95\%, plus the other 3\%
+}
+
+\noindent
+The overall predictor is a Hierarchical predictor that chooses between a 2BP and a tournament predictor, which itself chooses between a PShare and a GShare.
+
+\subsect{(45) RAS}
+
+\bullets{
+\item
+Contains the return addresses of functions
+\item
+When the RAS is full, there are two choices:
+\bullets{
+\item
+Don't push
+\item
+Wrap around
+}
+}
+
+\subsect{(46) Quiz: RAS Full}
+
+When the RAS is full, it is better to wrap around than to not push.
+
+\subsect{(47) But How Do We Know it's a RET}
+
+\bullets{
+\item
+Predictor
+\bullets{
+\item
+Must be very accurate
+\item
+PC = 0xABCD was RET $\Rightarrow$ 0xABCD is RET now
+}
+\item
+Precode
+\bullets{
+\item
+Annotate instruction in cache
+}
+}
+
+\subsect{(49 - 53) Problem Set}
+
+\sect{Lesson 6: Predication}
+
+\subsect{(2) Prediction}
+
+Branch Prediction
+
+\bullets{
+\item
+Guess where it is going
+\item
+No penalty if correct (0\% waste)
+\item
+Huge panalty if wrong (50\% waste)
+}
+
+Predication
+
+\bullets{
+\item
+Do work of both directions
+\item
+Wast up to 50\%
+\item
+Throw away work from wrong path
+}
+
+\noindent
+Loop $\Rightarrow$ Predict \\
+Func $\Rightarrow$ Predict \\
+Large if-then-else $\Rightarrow$ Predict \\
+Small if-then-else $\Rightarrow$ Predicate
+
+\subsect{(3) If Conversion}
+
+if(cond)\{ \\
+\indent x = arr[i]; \\
+\indent y = y + 1; \\
+\}else\{ \\
+\indent x = arr[j]; \\
+\indent y = y - 1; \\
+\}
+
+\indent \indent $\Downarrow$
+
+\noindent
+x1 = arr[i]; \\
+x2 = arr[j]; \\
+y1 = y + 1; \\
+y2 = y - 1; \\
+x = cond ? x1 : x2; $\Rightarrow$ MOV x,x1,cond \\
+y = cond ? y1 : y2; $\Rightarrow$ MOV y,y1,cond
+
+\subsect{(4) Conditional Move}
+
+MIPS
+\bullets{
+\item
+MOVZ $R_d,R_s,R_t \Rightarrow$ if($R_t$ == 0) $R_d = R_s$;
+\item
+MOVN $R_d,R_s,R_t \Rightarrow$ if($R_t$ != 0) $R_d = R_s$;
+}
+
+\noindent
+x86
+\bullets{
+\item
+CMOVZ, CMOVNZ, CMOVGT, ... $\Rightarrow$ if(cond) Dst = Src;
+}
+
+\subsect{(5, 7) Quiz: MOVZ, MOVN, and Performance}
+
+BEQZ R1,ELSE (taken 50\% of the time) \\
+ADDI R2,R2,1 \\
+B END \\
+ELSE: \\
+ADDI R3,R3,1 \\
+END: \\
+\indent \indent $\Downarrow$ \\
+ADDI R4,R2,1 \\
+ADDI R5,R3,1 \\
+MOVN R2,R4,R1 \\
+MOVZ R3,R5,R1
+
+\bullets{
+\item
+30-instruction penalty
+}
+
+\eq{
+Performance\ Threshold = \frac{4 - (2 + 3) \times 0.5}{30} = 5\%\ Accuracy
+}
+
+\noindent
+If-conversion is better when prediction accuracy is below 95\%.
+
+\pagebreak
+
+\subsect{(8) MOVc Summary}
+
+\bullets{
+\item
+Needs compiler support
+\item
+Removes hard-to-predict branches
+\item
+More registers are needed (unless full predication is possible)
+\bullets{
+\item
+Results from both paths
+}
+\item
+More instructions are executed
+\bullets{
+\item
+Both paths
+\item
+MOVc to select actual results (unless full predication is possible)
+}
+}
+
+\noindent
+Full predication is achieved when all instructions are conditional. This requires extensive support in the instruction set.
+
+\subsect{(9) Full Predication HW Support}
+
+MOVcc
+\bullets{
+\item
+Separate opcode
+}
+
+\noindent
+Full Predication
+\bullets{
+\item
+Add condition bits to every instruction
+}
+
+\subsect{(10) Full Predication Example}
+
+BEQZ R1,ELSE \\
+ADDI R2,R2,1 \\
+B END \\
+ELSE: \\
+ADDI R3,R3,1 \\
+END: \\
+\indent \indent $\Downarrow$ (if-convert)\\
+MP.EQZ P1,P2,R1 \\
+(P2) ADDI R2,R2,1 \\
+(P1) ADDI R3,R3,1
+
+\subsect{(11) Quiz: Full Predication}
+
+BEQZ R2,ELSE \\
+ADD R1,R1,1 \\
+B DONE \\
+ELSE: \\
+ADD R1,R1,-1 \\
+DONE: \\
+\indent \indent $\Downarrow$ (if-convert) \\
+MP.EQZ P1,P2,R2 \\
+(P2) ADD R1,R1,1 \\
+(P1) ADD R2,R2,1
+
+\bullets{
+\item
+CPI = 0.5 without mispredictions
+\item
+Misprediction penalty of 10 cycles
+}
+
+\eq{
+Performance\ Threshold &= \frac{(3 \times 0.5) - (2 + 3) \times 0.5 \times 0.5}{10} \\
+&= 2.5\%\ Accuracy
+}
+
+\noindent
+Do if-conversion if BEQZ prediction is less than 97.5\% correct.
+
+\subsect{(13 - 32) Problem Set}
+
+\sect{Lesson 7: ILP}
+
+\subsect{(2) ILP All in the Same Cycle}
+
+\tabl{l | c | c | c | c | c}{
+Instruction & Cycle 1 & 2 & 3 & ... & N \\ \hline
+R1 = R3 + R3 & FETCH & DECODE & EXECUTE & ... & WRITE \\ \hline
+R4 = R1 - R5 & FETCH & DECODE & EXECUTE & ... & WRITE \\ \hline
+R6 = R7 $\oplus$ R8 & FETCH & DECODE & EXECUTE & ... & WRITE \\ \hline
+R5 = R8 $\times$ R9 & FETCH & DECODE & EXECUTE & ... & WRITE \\ \hline
+R4 = R8 + R9 & FETCH & DECODE & EXECUTE & ... & WRITE \\
+}
+
+\eq{
+CPI = \frac{N\ cycles}{\infty\ instructions} = 0
+}
+
+\bullets{
+\item
+Data dependencies make this impossible
+}
+
+\subsect{(3) The Execute Stage}
+
+\bullets{
+\item
+I2 depends on I1
+}
+
+\tabl{c | c}{
+& EXE \\ \hline
+I1 & I1 \\ \hline
+I2 & stall \\ \hline
+I3 & I3 \\ \hline
+I4 & I4 \\ \hline
+I5 & I5 \\
+}
+
+\eq{
+CPI = \frac{2\ cycles}{5\ instructions} = 0.4
+}
+
+\pagebreak
+
+\subsect{(6) Quiz: Dependency}
+
+\bullets{
+\item
+5-stages (FETCH, RR, EXE, MEM, WREG)
+\item
+Forwarding enabled
+\item
+10 inputs in each stage
+}
+
+\tabl{l | c | c}{
+& EXE Cycle & WB \\ \hline
+MUL R2,R2,R2 & 2 & 4 \\ \hline
+ADD R1,R1,R2 & 3 & 5 \\ \hline
+MUL R3,R3,R3 & 2 & 4 \\ \hline
+ADD R1,R1,R3 & 4 & 6 \\ \hline
+MUL R4,R4,R4 & 2 & 4 \\ \hline
+ADD R1,R1,R4 & 5 & 7 \\
+}
+
+\subsect{(7) Removing False Dependencies}
+
+\bullets{
+\item
+RAW -- True Dependencies
+\item
+WAR, WAW -- False (Name) Dependencies
+}
+
+\subsect{(8) Duplicating Register Values}
+
+\tabl{l | c | c | c | c}{
+& c100 & c101 & c102 & c103 \\ \hline
+R1 = R2 + R3 & EXE & MEM & WR & - \\ \hline
+R4 = R1 - R5 & - & EXE & MEM & WR \\ \hline
+R3 = R4 + 1 & - & - & EXE & MEM \\ \hline
+R4 = R8 - R9 & EXE & MEM & WR & - \\ \hline
+\multicolumn{1}{| c |}{$\vdots$} & $\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ \\ \hline
+$\cdots$ = R4 $\cdots$ & $\cdots$ & $\cdots$ & $\cdots$ & $\cdots$ \\
+}
+
+\bullets{
+\item
+Create copies of shared registers
+}
+
+\pagebreak
+
+\subsect{(9) Register Renaming}
+
+\bullets{
+\item
+\emph{Architectural Registers}: Registers a programmer or compiler use
+\item
+\emph{Physical Registers}: All places a value can go
+\item
+Rewrite a program to use physical registers
+\item
+\emph{Register Allocation Table (RAT)}: A table that says which physical register has value for which architectural register
+}
+
+\subsect{(10) RAT Example}
+
+\center
+
+Initial RAT
+
+\tabl{l | l}{
+0 & P0 \\ \hline
+1 & P1 \\ \hline
+2 & P2 \\ \hline
+3 & P3 \\ \hline
+4 & P4 \\ \hline
+5 & P5 \\ \hline
+6 & P6 \\ \hline
+$\vdots$ & $\cdots$ \\
+}
+
+Instructions
+
+\tabl{l | l}{
+Fetched & Renamed \\ \hline
+ADD R1,R2,R3 & ADD P17,P2,P3 \\ \hline
+SUB R4,R1,R5 & SUB P18,P17,P5 \\ \hline
+XOR R6,R7,R8 & XOR P19,P7,P8 \\ \hline
+MUL R5,R8,R9 & MUL P20,P8,P9 \\ \hline
+ADD R4,R8,R9 & ADD P21,P8,P9 \\
+}
+
+\pagebreak
+
+\flushleft
+
+\subsect{(11) Quiz: Register Renaming}
+
+\center
+
+Final RAT
+
+\tabl{l | l}{
+R1 & P8 \\ \hline
+R2 & P11 \\ \hline
+R3 & P10 \\ \hline
+R4 & P4 \\ \hline
+R5 & P12 \\ \hline
+R6 & P6 \\
+}
+
+Instructions
+
+\tabl{l | l}{
+Fetched & Renamed \\ \hline
+MUL R2,R2,R2 & MUL P7,P2,P2 \\ \hline
+ADD R1,R1,R2 & ADD P8,P1,P7 \\ \hline
+MUL R2,R4,R4 & MUL P9,P4,P4 \\ \hline
+ADD R3,R3,R2 & ADD P10,P3,P9 \\ \hline
+MUL R2,R6,R6 & MUL P11,P6,P6 \\ \hline
+ADD R5,R5,R2 & ADD P12,P5,P11 \\
+}
+
+\flushleft
+
+\subsect{(13) Instruction Level Parallelism (ILP)}
+
+ILP = IPC When:
+
+\bullets{
+\item
+Processor does entire instruction in 1 cycle
+\item
+Processor can do any number of instructions in the same cycle
+\item
+Has to obey true dependencies
+\item
+ILP is a property of a program, not a processor.
+}
+
+Steps to Get ILP:
+\enum{
+\item
+Rename registors
+\item
+"Execute"
+}
+
+\subsect{(14) ILP Example}
+
+\tabl{l | c}{
+Instruction & Cycle \\ \hline
+ADD P10,P2,P3 & 1 \\ \hline
+XOR P6,P7,P8 & 1 \\ \hline
+MUL P5,P8,P9 & 1 \\ \hline
+ADD P4,P8,P9 & 1 \\ \hline
+SUB P11,P10,P5 & 2 \\
+}
+
+\eq{
+ILP = \frac{5\ instructions}{2\ cycles} = 2.5
+}
+
+\subsect{(15) Quiz: ILP}
+
+\tabl{l | c}{
+Instruction & Cylcle \\ \hline
+ADD R1,R1,R1 & 1  \\ \hline
+ADD R2,R2,R1 & 2 \\ \hline
+ADD R3,R2,R1 & 3 \\ \hline
+ADD R6,R7,R8 & 1 \\ \hline
+ADD R8,R3,R7 & 4 \\ \hline
+ADD R1,R1,R1 & 2 \\ \hline
+ADD R1,R7,R7 & 1 \\
+}
+
+\eq{
+ILP = \frac{7\ instructions}{4\ cycles} = 1.75
+}
+
+\subsect{(16) ILP With Structural \& Control Dependencies}
+
+\bullets{
+\item
+No structural dependencies
+\item
+Perfect same-cycle branch prediction
+}
+
+\subsect{(17) ILP vs. IPC}
+
+\bullets{
+\item
+ILP does not consider processor limitatipns, while IPC does
+\item
+ILP $\geq$ IPC
+}
+
+\subsect{(18) Quiz: IPC \& ILP}
+
+\bullets{
+\item
+3-issue in-order
+\item
+3 ALUs
+}
+
+\tabl{l | c | c}{
+Instruction & ILP Cylce & IPC Cycle \\ \hline
+ADD R1,R2,R3 & 1 & 1 \\ \hline
+ADD R2,R3,R4 & 1 & 1 \\ \hline
+ADD R3,R1,R2 & 2 & 2 \\ \hline
+ADD R7,R8,R9 & 1 & 2 \\ \hline
+ADD R1,R7,R7 & 2 & 2 \\ \hline
+ADD R1,R4,R5 & 1 & 3 \\
+}
+
+\eq{
+ILP &= \frac{6\ instructions}{2\ cycles} = 3 \\
+IPC &= \frac{6\ instructions}{3\ cycles} = 2
+}
+
+\subsect{(21 - 24) Problem Set}
+
+\sect{Lesson 8: Instruction Scheduling}
+
+\subsect{(2) Improving IPC}
+
+\bullets{
+\item
+ILP can be good ($>>$ 1)
+\item
+Control dependencies $\Rightarrow$ branch prediction
+\item
+WAR \& WAW data dependencies $\Rightarrow$ register renaming
+\item
+RAW data dependencies $\Rightarrow$ out of order execution
+\item
+Structural dependencies $\Rightarrow$ invest in wider-issue
+}
+
+\subsect{(3) Tomasulo's Algorithm}
+
+\bullets{
+\item
+Used in IBM 360
+\item
+Determine which instructions have inputs ready
+\item
+Register renaming
+\item
+Very similar to what we use today
+}
+
+Tomasulo:
+
+\bullets{
+\item
+Floating point instructions
+\item
+Fewer instructions in "window"
+\item
+No exception handling
+}
+
+Today:
+
+\bullets{
+\item
+All instructions
+\item
+100s of instructions
+\item
+Exception handling support
+}
+
+\pagebreak
+
+\subsect{(4) The Picture}
+
+\img{figures/lesson8_4.png}
+
+\subsect{(5) Issue}
+
+\bullets{
+\item
+Take next (in program order) instruction from Issue Queue (IQ)
+\item
+Determine where inputs come from
+\item
+Get free reservation station (or correct kind)
+\item
+Put instruction into reservation station
+\item
+Tag destination register
+}
+
+\pagebreak
+
+\subsect{(6) Issue Examples}
+
+\center
+
+\cols{
+IQ
+
+\tabl{c | l}{
+4 & F1 = F2 + F3 \\ \hline
+3 & F4 = F1 - F2 \\ \hline
+2 & F1 = F2 / F3 \\ \hline
+1 & F2 = F4 + F1 \\
+}
+}{
+RAT
+
+\tabl{c | c}{
+F1 & RS3 \\ \hline
+F2 & FS1 \\ \hline
+F3 & \\ \hline
+F4 & RS2 \\
+}
+}
+
+\cols{
+ADD
+
+\tabl{c | c | c | c}{
+RS1 & + & 0.71 & 3.14 \\ \hline
+RS2 & - & RS4 & RS1 \\ \hline
+RS3 & + & RS1 & 2.72 \\
+}
+}{
+MUL
+
+\tabl{c | c | c | c}{
+RS4 & / & RS1 & 2.72 \\ \hline
+RS5 & & & \\
+}
+}
+
+RF
+
+\tabl{c | c}{
+F1 & 3.14 \\ \hline
+F2 & -1.00 \\ \hline
+F3 & 2.72 \\ \hline
+F4 & RS2 \\
+}
+
+\flushleft
+
+\pagebreak
+
+\subsect{(7) Quiz: Issue}
+
+\center
+
+\cols{
+IQ
+
+\tabl{c | l}{
+2 & F4 = F3 $\times$ F4 \\ \hline
+1 & F4 = F1 / F2 \\
+}
+}{
+RAT
+
+\tabl{c | c}{
+F1 & RS4 \\ \hline
+F2 & FS1 \\ \hline
+F3 & \\ \hline
+F4 & RS5 \\
+}
+}
+
+\cols{
+ADD
+
+\tabl{c | c | c | c}{
+RS1 & ADD & 0.71 & -1 \\ \hline
+RS2 & & & \\ \hline
+RS3 & & & \\
+}
+}{
+MUL
+
+\tabl{c | c | c | c}{
+RS4 & DIV & RS1 & 2.72 \\ \hline
+RS5 & DIV & RS4 & RS1 \\
+}
+}
+
+RF
+
+\tabl{c | c}{
+F1 & 3.14 \\ \hline
+F2 & -1.00 \\ \hline
+F3 & 2.72 \\ \hline
+F4 & 0.71 \\
+}
+
+\flushleft
+
+\subsect{(8) Dispatch}
+
+When a result is being broadcast:
+
+\enum{
+\item
+Search for a matching tag
+\item
+Broadcast result
+}
+
+\subsect{(9) More than 1 Instruction Ready}
+
+\bullets{
+\item
+Oldest first
+\item
+Most dependencies first
+\item
+Random
+}
+
+\subsect{(10) Quiz: Dispatch}
+
+\bullets{
+\item
+Dispatching RS1 = 0.29
+}
+
+\center
+
+ADD
+
+\tabl{c | c | c | c}{
+RS1 & & & \\ \hline
+RS2 & SUB & RS1 & RS1 \\ \hline
+RS3 & ADD & 1.23 & 2.72 \\
+}
+
+MUL
+
+\tabl{c | c | c | c}{
+RS4 & DIV & RS1 & 2.72 \\ \hline
+RS5 & & & \\ \hline
+}
+
+\flushleft
+
+RS3 wasn't dispatched already because it was either issued in the previous cycle or another instruction was dispatched in the ADD unit.
+
+\subsect{(11) Write Result (Broadcast)}
+
+\enum{
+\item
+Put Tag \& Res on bus
+\item
+Write to RF
+\item
+Update RAT
+\item
+Free RS
+}
+
+\subsect{(12) More than 1 Broadcast}
+
+\bullets{
+\item
+Give priority to the slower operation
+}
+
+\subsect{(13) Broadcast Stale Results}
+
+\bullets{
+\item
+Do not update the RAT or RF (Register File) with the result
+}
+
+\subsect{(19) Quiz: Tomasulo's Algorithm}
+
+Tomasulo's Algorithm does not dispatch instructions or results in program order.
+
+\subsect{(20) Load \& Store Instructions}
+
+\bullets{
+\item
+Dependencies Through Memory
+\bullets{
+\item
+RAW: SW to A, then LW from A
+\item
+WAR: LW then SW
+\item
+WAW: SW, then SW to same address
+}
+\item
+What can we do?
+\bullets{
+\item
+Do loads and stores in order
+\item
+Identify dependencies, reorder, etc.
+}
+}
+
+\subsect{(27) Timing Example}
+
+Load: 2 cycles \\
+Add: 2 cycles \\
+Multiply: 10 cycles \\
+Divide: 40 cycles
+
+\tabl{c | l | c | c | c | l}{
+& \multicolumn{1}{ | c | }{Instruction} & IS & EX & WR & Comment \\ \hline
+1 & L.D F6,34(R2) & 1 & 2 & 4 & \\ \hline
+2 & L.D F2,45(R3) & 2 & 4 & 6 & \\ \hline
+3 & MUL.D F0,F2,F4 & 3 & 7 & 17 & F2 from 2 \\ \hline
+4 & SUB.D F8,F2,F6 & 4 & 7 & 9 & F2  from 2 \\ \hline
+5 & DIV.D F10,F0,F6 & 5 & 18 & 58 & F0 from 3 \\ \hline
+6 & ADD.D F6,F8,F2 & 6 & 10 & 12 & F8 from 4 \\
+}
+
+\pagebreak
+
+\subsect{(28 - 29) Quiz: Tomasulo Timing}
+
+Latency:
+
+\bullets{
+\item
+LD: 1 cycle
+\item
+ADD: 1 cylce
+\item
+MUL: 5 cycles
+}
+
+\# of Reservation Stations:
+
+\bullets{
+\item
+LD: 1
+\item
+ADD: 2
+\item
+MUL: 3
+}
+
+Same-cycle:
+
+\bullets{
+\item
+Issue $\rightarrow$ Dispatch: No
+\item
+Capture $\rightarrow$ Dispatch: No
+\item
+RS freed $\rightarrow$ RS alloc: No
+}
+
+\tabl{c | l | c | c | c}{
+1 & LD F6,0(R2) & 1 & 2 & 3 \\ \hline
+2 & MUL F2,F0,F1 & 2 & 3 & 8 \\ \hline
+3 & ADD F6,F2,F6 & 3 & 9 & 10 \\ \hline
+4 & ADD F6,F2,F6 & 4 & 11 & 12 \\ \hline
+5 & ADD F1,F1,F1 & 11 & 12 & 13 \\ \hline
+6 & ADD F1,F3,F4 & 13 & 14 & 15 \\ \hline
+}
+
+\subsect{(31 - 35) Problem Set}
+
+\end{document}
