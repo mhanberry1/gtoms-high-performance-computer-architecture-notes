@@ -7,6 +7,7 @@
 \usepackage{placeins}
 \usepackage{courier}
 \usepackage{multirow, multicol}
+\usepackage{soul}
 
 \renewcommand*{\cftdot}{}
 \cftpagenumbersoff{subsection}
@@ -1857,5 +1858,210 @@ RS freed $\rightarrow$ RS alloc: No
 }
 
 \subsect{(31 - 35) Problem Set}
+
+\sect{Lesson 9: ReOrder Buffer}
+
+\subsect{(4) Correct Out of Order Execution}
+
+\bullets{
+\item
+Execute 000
+\item
+Broadcast 000
+\item
+But deposit values to REGs in-order!
+}
+
+$\Rightarrow$ ReOrder Buffer:
+
+\bullets{
+	\item
+	Remembers program order
+	\item
+	Keeps result until it is safe to write to REGs
+}
+
+\subsect{(5 - 6, 9) ROB}
+
+\bullets{
+\item
+Issue: Get Registration Station, get ROB entry, point RAT to ROB entry
+\item
+Dispatch: Ready? Send to EXE and free RS!
+\item
+BCast: Capture, WR to ROB
+\item
+Commit: WR to REG, update RAT
+}
+
+\subsect{(7) Quiz: Free Reservation Station}
+
+If there is no ROB, it is more likely for an instruction to be unable to issue because there is no available RS.
+
+\subsect{(10) Quiz: ROB}
+
+The ROB is needed to:
+
+\bullets{
+\item
+Remember the program order
+\item
+Temporarily store an instruction's result
+\item
+Serve as the name (TAG) for the result
+}
+
+\subsect{(11) Branch Misprediction Recovery}
+
+LD R1,0(R1) \\
+BNE R1,R2,Label \\
+ADD R2,R1,R1 \\
+MUL R3,R3,R4 \\
+DIV R2,R3,R7
+
+\cols{
+\center
+REGS
+\flushleft
+
+\tabl{c | c}{
+R1 & 700 \\ \hline
+R2 & \\ \hline
+R3 & \\
+}
+}{
+
+\center
+RAT
+\flushleft
+
+\tabl{c | c}{
+\st{ROB1} & Issue \\ \hline
+ROB5 & Wrong \\ \hline
+ROB4 & Wrong \\
+}
+}
+
+\tabl{l | c | c | c | c}{
+& Line & REG & Val & Done \\ \hline
+Commit [1] & 0 & & & \\ \hline
+Commit [2] & 1 & R1 & 700 & $\checkmark$ \\ \hline
+Commit [3], Issue [2] & 2 & - & ERROR & $\checkmark$ \\ \hline
+& 3 & R2 & $\checkmark$ & $\checkmark$ (Wrong) \\ \hline
+& 4 & R3 & 15 & $\checkmark$ (Wrong) \\ \hline
+Issue [1] & 5 & R2 & 2 & $\checkmark$ (Wrong) \\
+}
+
+\subsect{(13) ROB and Exceptions}
+
+\bullets{
+\item
+Treat an exception as a result
+\item
+Delay actual handling until the commit
+}
+
+\subsect{(15) Quiz:Exceptions with ROB}
+
+\tabl{l | c | c}{
+Instruction & Status & New Status \\ \hline
+ADD R2,R2,R1 & committed & committed \\ \hline
+LW R1,0(R2) & executing & committed \\ \hline
+ADD R3,R4,R5 & done & committed \\ \hline
+DIV R3,R2,R3 & executing (Exception) & unexecuted \\ \hline
+ADD R1,R4,R4 & done & unexecuted \\ \hline
+ADD R3,R2,R2 & done & unexecuted \\
+}
+
+\subsect{(31) ROB Timing Example}
+
+\bullets{
+\item
+Free RS on BCast, not Dispatch
+\item
+Issue, Capture, Dispatch in same cycle
+\item
+ADD: 1 cycle, MUL: 10 cycles, DIV 40 cycles
+}
+
+\tabl{l | l | c | c | c | c | c}{
+Inst & Operands & IS & EXE & WR & Commit & Comment \\ \hline
+DIV & R2,R3,R4 & 1 & 2 & 42 & 43 & \\ \hline
+MUL & R1,R5,R6 & 2 & 3 & 13 & 44 & \\ \hline
+ADD & R3,R7,R8 & 3 & 4 & 5 & 45 & \\ \hline
+MUL & R1,R1,R3 & 14 & 15 & 25 & 45 & Need RS $\rightarrow$ Issue \\ \hline
+SUB & R4,R1,R5 & 15 & 25 & 27 & 47 & EXE depends on R1 \\ \hline
+ADD & R1,R4,R2 & 16 & 43 & 44 & 48 & EXE depends on R2 \\
+}
+
+\subsect{(32 - 34) Quiz: ROB Timing}
+
+\bullets{
+\item
+BCast one ADD/SUB and one MUL/DIV per cycle
+\item
+Commit up to 2 instructions per cycle
+\item
+Free RS at dispatch
+\item
+ADD: 1 cycle, MUL: 2 cycles, DIV: 4 cycles
+}
+
+\tabl{l | l | c | c | c | c}{
+Inst & Operands & IS & EXE & WR & Commit \\ \hline
+DIV & R2,R3,R4 & 1 & 2 & 6 & 7 \\ \hline
+MUL & R1,R5,R6 & 2 & 3 & 5 & 7 \\ \hline
+ADD & R3,R7,R8 & 3 & 4 & 5 & 8 \\ \hline
+MUL & R1,R1,R2 & 4 & 7 & 9 & 10 \\ \hline
+SUB & R4,R2,R5 & 5 & 7 & 8 & 10 \\ \hline
+ADD & R1,R4,R3 & 6 & 9 & 10 & 11 \\
+}
+
+\subsect{(36) Superscalar}
+
+\bullets{
+\item
+Fetch $>$ 1 inst/cycle
+\item
+Decode $>$ 1 inst/cycle
+\item
+Issue $>$ 1 inst/cycle
+\item
+Dispatch $>$ 1 inst/cycle
+\item
+Broadcast $>$ 1 result/cycle
+\item
+Commit $>$ 1 inst/cycle
+}
+
+\subsect{(37) Terminology Confusion}
+
+\bullets{
+\item
+Issue $\Rightarrow$ Allocate, Dispatch
+\item
+Dispatch $\Rightarrow$ Execute, Issue
+\item
+Commit $\Rightarrow$ Complete, Retire, Graduate
+}
+
+\subsect{(38) Out of Order}
+
+Only execution and broadcast stages occur out-of-order.
+
+\subsect{(39) Quiz: In Order vs Out of Order}
+
+\tabl{c | c | c}{
+Stage & In-Order & Out-of-Order \\ \hline
+Fetch & $\checkmark$ & \\ \hline
+Decode & $\checkmark$ & \\ \hline
+Issue & $\checkmark$ & \\ \hline
+Dispatch & & $\checkmark$ \\ \hline
+Execute 1 & & $\checkmark$ \\ \hline
+Execute 2 & & $\checkmark$ \\ \hline
+Broadcast & & $\checkmark$ \\ \hline
+Commit & $\checkmark$ & \\ \hline
+Release ROB Entry & $\checkmark$ & \\
+}
 
 \end{document}
