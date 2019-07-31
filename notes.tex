@@ -74,7 +74,7 @@
 
 \begin{document}
 
-\title{Advanced Operating Systems Notes}
+\title{High Performance Computer Architecture}
 \author{Madison Hanberry}
 \maketitle
 
@@ -2017,6 +2017,8 @@ SUB & R4,R2,R5 & 5 & 7 & 8 & 10 \\ \hline
 ADD & R1,R4,R3 & 6 & 9 & 10 & 11 \\
 }
 
+\pagebreak
+
 \subsect{(36) Superscalar}
 
 \bullets{
@@ -2063,5 +2065,150 @@ Broadcast & & $\checkmark$ \\ \hline
 Commit & $\checkmark$ & \\ \hline
 Release ROB Entry & $\checkmark$ & \\
 }
+
+\sect{Lesson 11: Memory Ordering}
+
+\subsect{(2) Memory Access Ordering}
+
+\bullets{
+\item
+Eliminated control dependencies
+\bullets{
+\item
+Branch prediction
+}
+\item
+Eliminated false dependencies on registers
+\bullets{
+\item
+Register renaming
+}
+\item
+Obey raw register dependencies
+\bullets{
+\item
+Tomasulo-like scheduling
+}
+\item
+What about memory dependencies?
+}
+
+\subsect{(3) When Does Memory Write Happen?}
+
+\bullets{
+\item
+At commit
+\item
+Where does LOAD get data?
+\bullets{
+\item
+Load-Store Queue
+}
+}
+
+\subsect{(4 - 5) Load-Store Queue}
+
+Options:
+
+\enum{
+\item
+In-order
+\item
+Wait for all previous store addresses
+\item
+Go anyway
+}
+
+\subsect{(8) Quiz: Memory Ordering}
+
+\tabl{l | c | c | c | c}{
+& \multicolumn{2}{ | c | }{Out-of-Order} & \multicolumn{2}{ | c | }{In-Order} \\ \hline
+LW R1,0(R2) & 1 & 41 & 1 & 41 \\ \hline
+SW R1,4(R2) & & $\checkmark$ & & $\checkmark$ \\ \hline
+LW R1,0(R3) & 2 & 42 & 43 & 83 \\ \hline
+SW R1,4(R3) & & $\checkmark$ & & $\checkmark$ \\ \hline
+LW R1,0(R4) & 3 & 43 & 86 & 125 \\ \hline
+SW R1,4(R4) & & $\checkmark$ & & $\checkmark$ \\
+}
+
+\subsect{(9) Store To Load Forwarding}
+LOAD
+\bullets{
+\item
+Which earlier store do we get values from?
+}
+STORE
+\bullets{
+\item
+Which later load do I give my value to?
+}
+Where do we figure this out?
+\bullets{
+\item
+In the Load-Store Queue!
+}
+
+\subsect{(10) LSQ Example}
+
+\img{figures/lesson11_10.png}
+
+\pagebreak
+
+\subsect{(11) LSQ, ROB, and RS}
+
+Issue LOAD/STORE:
+
+\bullets{
+\item
+A ROB entry
+\item
+An LSQ entry
+}
+
+Issue non-LOAD/STORE:
+
+\bullets{
+\item
+A ROB entry
+\item
+An RS
+}
+
+Execute LOAD/STORE
+
+\enum{
+\item
+Compute address
+\item
+Produce value
+}
+
+Write-result (LOAD)
+
+\bullets{
+\item
+Broadcast
+}
+
+Commit LOAD/STORE
+
+\bullets{
+\item
+Free ROB entries
+}
+
++ Commit STORE
+
+\bullets{
+\item
+Send write to memory
+}
+
+\subsect{(12 -13) Quiz: Memory Ordering}
+
+SW R1 $\rightarrow$ 0(R2) \\
+LW R2 $\leftarrow$ 0(R2) \\
+\bigskip
+LW does not access cache or memory because it shares the same addresses with the previous SW, so the values are forwarded from the Load-Store Queue.
 
 \end{document}

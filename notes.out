@@ -132,3 +132,12 @@
 \BOOKMARK [2][-]{section*.133}{\(37\) Terminology Confusion}{section*.122}% 132
 \BOOKMARK [2][-]{section*.134}{\(38\) Out of Order}{section*.122}% 133
 \BOOKMARK [2][-]{section*.135}{\(39\) Quiz: In Order vs Out of Order}{section*.122}% 134
+\BOOKMARK [1][-]{section*.136}{Lesson 11: Memory Ordering}{}% 135
+\BOOKMARK [2][-]{section*.137}{\(2\) Memory Access Ordering}{section*.136}% 136
+\BOOKMARK [2][-]{section*.138}{\(3\) When Does Memory Write Happen?}{section*.136}% 137
+\BOOKMARK [2][-]{section*.139}{\(4 - 5\) Load-Store Queue}{section*.136}% 138
+\BOOKMARK [2][-]{section*.140}{\(8\) Quiz: Memory Ordering}{section*.136}% 139
+\BOOKMARK [2][-]{section*.141}{\(9\) Store To Load Forwarding}{section*.136}% 140
+\BOOKMARK [2][-]{section*.142}{\(10\) LSQ Example}{section*.136}% 141
+\BOOKMARK [2][-]{section*.143}{\(11\) LSQ, ROB, and RS}{section*.136}% 142
+\BOOKMARK [2][-]{section*.144}{\(12 -13\) Quiz: Memory Ordering}{section*.136}% 143

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.10.11)  17 JUN 2019 19:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.10.11)  30 JUL 2019 22:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -425,8 +425,8 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \tf@toc=\write4
 \openout4 = `notes.toc'.
 
- [5]
-<figures/lesson2_13.png, id=705, 580.49129pt x 469.755pt>
+ [5] [6]
+<figures/lesson2_13.png, id=754, 580.49129pt x 469.755pt>
 File: figures/lesson2_13.png Graphic file (type png)
 <use figures/lesson2_13.png>
 Package pdftex.def Info: figures/lesson2_13.png  used on input line 105.
@@ -440,7 +440,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 115.
 
-[6 <./figures/lesson2_13.png (PNG copy)>]
+[7 <./figures/lesson2_13.png (PNG copy)>]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 122.
@@ -449,7 +449,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 122.
 
-[7]
+[8]
 LaTeX Font Info:    Try loading font information for OMS+cmr on input line 152.
 
  (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
@@ -457,31 +457,31 @@ File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 152.
- [8]
+ [9]
 Overfull \hbox (11.06151pt too wide) in paragraph at lines 211--212
 \OT1/cmr/m/n/12 Use the \OT1/cmr/m/it/12 ge-o-met-ric mean \OT1/cmr/m/n/12 in-s
 tead of the \OT1/cmr/m/it/12 arith-metic mean \OT1/cmr/m/n/12 for com-par-ing s
 peedups. 
  []
 
-<figures/lesson3_13.png, id=731, 727.36258pt x 531.26138pt>
+<figures/lesson3_13.png, id=780, 727.36258pt x 531.26138pt>
 File: figures/lesson3_13.png Graphic file (type png)
 <use figures/lesson3_13.png>
 Package pdftex.def Info: figures/lesson3_13.png  used on input line 213.
 (pdftex.def)             Requested size: 195.0pt x 142.42108pt.
-[9 <./figures/lesson3_13.png (PNG copy)>]
+[10 <./figures/lesson3_13.png (PNG copy)>]
 Overfull \hbox (25.50294pt too wide) detected at line 281
 [][][]
  []
 
-[10]
-<figures/lesson3_20.png, id=749, 247.11678pt x 204.50873pt>
+[11]
+<figures/lesson3_20.png, id=799, 247.11678pt x 204.50873pt>
 File: figures/lesson3_20.png Graphic file (type png)
 <use figures/lesson3_20.png>
 Package pdftex.def Info: figures/lesson3_20.png  used on input line 294.
 (pdftex.def)             Requested size: 195.0pt x 161.38225pt.
- [11 <./figures/lesson3_20.png (PNG copy)>]
-<figures/lesson3_22.png, id=758, 498.89613pt x 420.5499pt>
+ [12 <./figures/lesson3_20.png (PNG copy)>]
+<figures/lesson3_22.png, id=808, 498.89613pt x 420.5499pt>
 File: figures/lesson3_22.png Graphic file (type png)
 <use figures/lesson3_22.png>
 Package pdftex.def Info: figures/lesson3_22.png  used on input line 305.
@@ -523,80 +523,87 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 319.
 
-[12 <./figures/lesson3_22.png (PNG copy)>] [13]
-<figures/lesson4_3.png, id=772, 562.61806pt x 365.96298pt>
+[13 <./figures/lesson3_22.png (PNG copy)>] [14]
+<figures/lesson4_3.png, id=822, 562.61806pt x 365.96298pt>
 File: figures/lesson4_3.png Graphic file (type png)
 <use figures/lesson4_3.png>
 Package pdftex.def Info: figures/lesson4_3.png  used on input line 348.
 (pdftex.def)             Requested size: 195.0pt x 126.8381pt.
- [14 <./figures/lesson4_3.png (PNG copy)>]
-<figures/lesson4_8.png, id=780, 1200.61452pt x 638.89755pt>
+ [15 <./figures/lesson4_3.png (PNG copy)>]
+<figures/lesson4_8.png, id=829, 1200.61452pt x 638.89755pt>
 File: figures/lesson4_8.png Graphic file (type png)
 <use figures/lesson4_8.png>
 Package pdftex.def Info: figures/lesson4_8.png  used on input line 382.
 (pdftex.def)             Requested size: 195.0pt x 103.76599pt.
- [15 <./figures/lesson4_8.png (PNG copy)>] [16]
-<figures/lesson4_17.png, id=792, 521.43193pt x 246.79436pt>
+ [16 <./figures/lesson4_8.png (PNG copy)>] [17]
+<figures/lesson4_17.png, id=841, 521.43193pt x 246.79436pt>
 File: figures/lesson4_17.png Graphic file (type png)
 <use figures/lesson4_17.png>
 Package pdftex.def Info: figures/lesson4_17.png  used on input line 495.
 (pdftex.def)             Requested size: 195.0pt x 92.29158pt.
- [17 <./figures/lesson4_17.png (PNG copy)>] [18] [19] [20]
-<figures/lesson5_13.png, id=816, 1289.20355pt x 571.24052pt>
+ [18 <./figures/lesson4_17.png (PNG copy)>] [19] [20] [21]
+<figures/lesson5_13.png, id=865, 1289.20355pt x 571.24052pt>
 File: figures/lesson5_13.png Graphic file (type png)
 <use figures/lesson5_13.png>
 Package pdftex.def Info: figures/lesson5_13.png  used on input line 689.
 (pdftex.def)             Requested size: 195.0pt x 86.39713pt.
- [21 <./figures/lesson5_13.png (PNG copy)>]
-<figures/lesson5_16.png, id=824, 1330.38968pt x 575.85352pt>
+ [22 <./figures/lesson5_13.png (PNG copy)>]
+<figures/lesson5_16.png, id=873, 1330.38968pt x 575.85352pt>
 File: figures/lesson5_16.png Graphic file (type png)
 <use figures/lesson5_16.png>
 Package pdftex.def Info: figures/lesson5_16.png  used on input line 717.
 (pdftex.def)             Requested size: 195.0pt x 84.39726pt.
-[22 <./figures/lesson5_16.png (PNG copy)>] [23]
-<figures/lesson5_23.png, id=835, 636.44226pt x 291.38649pt>
+[23 <./figures/lesson5_16.png (PNG copy)>] [24]
+<figures/lesson5_23.png, id=884, 636.44226pt x 291.38649pt>
 File: figures/lesson5_23.png Graphic file (type png)
 <use figures/lesson5_23.png>
 Package pdftex.def Info: figures/lesson5_23.png  used on input line 797.
 (pdftex.def)             Requested size: 195.0pt x 89.27512pt.
- [24 <./figures/lesson5_23.png (PNG copy)>] [25]
-<figures/lesson5_34.png, id=846, 1246.46323pt x 608.9132pt>
+ [25 <./figures/lesson5_23.png (PNG copy)>] [26]
+<figures/lesson5_34.png, id=896, 1246.46323pt x 608.9132pt>
 File: figures/lesson5_34.png Graphic file (type png)
 <use figures/lesson5_34.png>
 Package pdftex.def Info: figures/lesson5_34.png  used on input line 909.
 (pdftex.def)             Requested size: 195.0pt x 95.25394pt.
- [26 <./figures/lesson5_34.png (PNG copy)>] [27]
-<figures/lesson5_40.png, id=857, 1376.23839pt x 666.57542pt>
+ [27 <./figures/lesson5_34.png (PNG copy)>] [28]
+<figures/lesson5_40.png, id=907, 1376.23839pt x 666.57542pt>
 File: figures/lesson5_40.png Graphic file (type png)
 <use figures/lesson5_40.png>
 Package pdftex.def Info: figures/lesson5_40.png  used on input line 988.
 (pdftex.def)             Requested size: 195.0pt x 94.43874pt.
- [28 <./figures/lesson5_40.png (PNG copy)>] [29] [30] [31] [32] [33] [34] [35] 
-[36] [37]
-[38] [39] [40]
-<figures/lesson8_4.png, id=922, 1282.20967pt x 752.68436pt>
+ [29 <./figures/lesson5_40.png (PNG copy)>] [30] [31] [32] [33] [34] [35] [36] 
+[37] [38]
+[39] [40] [41]
+<figures/lesson8_4.png, id=972, 1282.20967pt x 752.68436pt>
 File: figures/lesson8_4.png Graphic file (type png)
 <use figures/lesson8_4.png>
 Package pdftex.def Info: figures/lesson8_4.png  used on input line 1570.
 (pdftex.def)             Requested size: 195.0pt x 114.45975pt.
- [41 <./figures/lesson8_4.png>] [42] [43] [44] [45] [46] [47]
-[48] [49]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2067.
- [50]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 2067.
- (./notes.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 2067.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 2067.
+ [42 <./figures/lesson8_4.png>] [43] [44] [45] [46] [47] [48]
+[49] [50] [51] [52]
+<figures/lesson11_10.png, id=1030, 794.97pt x 352.12404pt>
+File: figures/lesson11_10.png Graphic file (type png)
+<use figures/lesson11_10.png>
+Package pdftex.def Info: figures/lesson11_10.png  used on input line 2153.
+(pdftex.def)             Requested size: 195.0pt x 86.37053pt.
+ [53 <./figures/lesson11_10.png (PNG copy)>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2214.
+ [54]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 2214.
+
+(./notes.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 2214.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 2214.
 
 Package rerunfilecheck Info: File `notes.out' has not changed.
-(rerunfilecheck)             Checksum: 340E48FA004ECBC8FE12D898E1216D7F;10145.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 2067.
+(rerunfilecheck)             Checksum: 192F9FF9AD720562CDCB077F358BFADB;10847.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 2214.
  ) 
 Here is how much of TeX's memory you used:
- 6996 strings out of 494847
- 99935 string characters out of 6179079
+ 7028 strings out of 494847
+ 100357 string characters out of 6179079
  184566 words of memory out of 5000000
- 9988 multiletter control sequences out of 15000+600000
+ 10001 multiletter control sequences out of 15000+600000
  13708 words of font info for 53 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  28i,15n,26p,233b,447s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -612,10 +619,10 @@ sfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
 m/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti
 12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam1
 0.pfb>
-Output written on notes.pdf (50 pages, 3190686 bytes).
+Output written on notes.pdf (54 pages, 3515554 bytes).
 PDF statistics:
- 1070 PDF objects out of 1200 (max. 8388607)
- 982 compressed objects within 10 object streams
- 242 named destinations out of 1000 (max. 500000)
- 1138 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1142 PDF objects out of 1200 (max. 8388607)
+ 1048 compressed objects within 11 object streams
+ 260 named destinations out of 1000 (max. 500000)
+ 1215 words of extra memory for PDF output out of 10000 (max. 10000000)
 

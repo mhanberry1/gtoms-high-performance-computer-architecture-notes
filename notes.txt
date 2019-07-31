@@ -1,0 +1,1784 @@
+Lesson 12: Compiler ILP
+
+(2) Can Compilers Help Improve IPC?
+* Limited ILP
+	- Dependence chains
+* Limited "window" into program
+	- Independent instructions far apart
+
+(3) Tree Height Reduction
+R8 = R2 + R3 + R4 + R5 => (R2 + R3) + (R4 + R5)
+
+Normal:
+ADD R8,R2,R3
+ADD R8,R8,R4
+ADD R8,R8,R5
+
+Reduced:
+ADD R8,R2,R3
+ADD R7,R4,R5
+ADD R8,R8,R7
+
+- Uses associativity
+	- Not all operations are associative
+
+(4) Quiz: Tree Height Reduction Quiz
+
+Original:
+ADD R10,R1,R2
+SUB R10,R10,R3
+ADD R10,R10,R4
+SUB R10,R10,R5
+ADD R10,R10,R6
+SUB R10,R10,R7
+
+ILP = 6 / 6 = 1
+
+Reduced:
+ADD R10,R1,R2
+ADD R11,R4,R6
+ADD R10,R10,R11
+ADD R11,R3,R5
+ADD R11,R11,R7
+SUB R10,R10,R11
+
+ILP = 6 / 3
+
+(5) Make Independent Instructions Easier to Find
+* Instruction scheduling
+* Loop unrolling + \Uparrow
+* Trace scheduling
+
+(6) Instruction Scheduling
+* Find instructions that can be done during stalls, thus minimizing stalls.
+
+(7) Quiz: Instruction Scheduling
+* LW: 2 cycles
+* ADD: 1 cycle
+* SW: 1 cycle
+* 1 instruction/cycle
+* in-order
+
+LW R1,0(R2)
+ADD R1,R1,R3
+SW R1,0(R2)
+LW R1,0(R4)
+ADD R1,R1,R5
+SW R1,0(R4)
+
+As is, the routine will take 8 cycles. After instruction scheduling, it will take 6 cycles
+
+(10) Loop Unrolling
+* Copy the work of a loop x number of times, and divide the iterations by x so that the work can be scheduled.
+
+(11 - 13) Loop Unrolling Benefits
+* The total number of instructions decreases
+* The CPI may decrease because the work can be more effectively scheduled
+
+(14) Quiz: Loop Unrolling
+* In-order: 1 instruction/cycle
+* LW: 3 cycles
+* ADD/ADDI: 2 cycles
+
+Loop:
+LW R1,0(R2)
+ADD R3,R3,R1
+ADDI R2,R2,4
+BNE R2,R4,Loop
+
+* After scheduling, execution takes 5000 cycles.
+* After scheduling and loop unrolling, execution takes 3500 cycles.
+
+(15) Unrolling Downside?
+* Code bloat
+* What if the number of iterations is unknown?
+* What if the number of iterations is not a multiple of N?
+
+(16) Function Call Inlining
+Benefits:
+* Eliminates call/return overhead
+* Better scheduling
+
+(17) Function Call Inlining Downside
+* Code bloat
+* Works better for smal functions where the overhead of calling/returning the function is proportionally more significant.
+
+(18) Quiz: Function Inlining
+* LW: 2 cycles
+* CALL: 2 cycles
+* RET: 2 cycles
+* SW, ADD: 1 cycle/instruction
+* MUL: 3 cycles
+
+LW A0,0(R1)
+CALL AddSq
+SW RV,0(R2)
+AddSq:
+MUL A0,A0,A0
+ADD RV,A0,A1
+RET
+
+* After scheduling, execution takes 10 cycles.
+* After scheduling and loop unrolling, execution takes 7 cycles.
+
+(19) Other IPC-Enhancing Compiler Stuff
+* Software pipelining
+* Trace scheduling
+
+Lesson 13: VLIW
+
+(2) Superscalar vs. VLIW
+
+[IMG]
+
+(3) Quiz: Superscalar vs VLIW
+
+0.0 Suerscalar
+* 32-bit instruction
+* Program size: 4000 bytes
+
+VLIW
+* 128-bit instruction
+	- Each specifies 4 ops
+* Program size is between 4000 and 16000 bytes.
+
+(4) The Food and the Bad
+
+Good
+* Compiler does the hard work
+	- Plenty of time
+* Simpler HW
+* Can be energy efficient
+* Works well on loops and "regular" code
+
+Bad
+* Latencies are not always the same (eg. cache misses)
+* Irregular applications
+* Code bload
+	- Lots of NOPS
+
+(5) Quiz: VLIW Backward Compatibility
+Simple VLIW
+* 64-bit instructions (2 ops)
+* FETCH, DECODE, EXE 2 instructions/cycle
+
+Better VLIW
+* 4 ops/cycle
+* FETCH, DECODE, EXE 2 64-bit instructions/cycle
+
+In this case, the "Better VLIW" is not better because it cannot actually execute more instruction per cycle.
+
+(6) VLIW Instructions
+
+* Has all the "normal" ISA opcodes
+* Full predication support
+* Lots of registers
+* VLIW instruction "compaction"
+
+(7) VLIW Examples
+
+Itanium
+* Tons of ISA features
+* The hardware is very complicated
+* Still not great on irregular code
+
+DSP Processors
+* Regular loops, lots of iterations
+* Excellent performance
+* Very energy-efficient
+
+(8) Quiz: VLIW Target Market
+
+The order in which VLIW suits the following tasks is:
+1) Add many numbers together
+2) Count elements of a linked list
+3) Figure out the best path in a maze
+
+Lesson 15: Cache Review
+
+(2) Locality Principle
+
+Things that will happen soon are likely to be close to things that just happened.
+
+(4) Memory References
+
+Accessed address X recently
+	* Likely to access X again soon (Temporal Locality)
+	* Likely to access addresses close to X, too (Spatial Locality)
+
+(5 - 6) Quiz: Locality
+
+int sum = 0
+for(int j = 0; j < 1000; j++)
+	sum = sum + arr[j];
+
+In this code, memory locations j and sum have temporal locality, while the elements of arr have spatial locality
+
+(7) Locality and Data Accesses
+
+* Library - Large but slow to access
+* accesses have temporal and spatial locality
+
+A student will:
+	1) go to the library, find info, go back home. (does not benefit from locality)
+	2) borrow the book (benefits from locality)
+	3) take all books and build a library at home (expensive, and still slow)
+
+(8) Quiz: Cache
+
+* Main memory large and slow to access
+* Lots of spatial and temporal locality
+
+In this scenario, it is best to have a small memory inside the processor core, and to bring stuff we access there.
+
+(9) Cache Lookups
+
+* Fast => small
+* Not everything will fit
+* Access
+	- Cache hit: Found it in the cache (fast)
+	- Cache miss: Not in cache => access from memory (slow but rare)
+		* Cop this location to cache
+
+(10) Cache Performance
+
+* Average memory access time (AMAT)
+
+AMAT = Hit Time + Miss Rate \times Miss Penalty
+
+Miss Time = Hit Time + Miss Penalty
+
+AMAT = (1 - Miss Rate) \times HitTime + Miss Rate \times Miss Time
+
+(11) Quiz: Hit Time Quiz
+
+In a well-designed cache, hit time is less than miss time, and miss time is greater than the miss penalty.
+
+(12) Quiz: Miss Rate
+
+Hit rate = 1 - Miss Rate
+
+For a well designed cache, the hit rate is greater than the miss rate, and the hit rate is almost 1.
+
+(13) Cache Size in Real Processors
+
+* complication - several caches
+
+L1 cache - directly service read/write requests from the processor
+
+16kb - 64kb
+	* Large enough to get \approx 90% hit rate
+	* Small enough to hit in 1-3 cycles
+
+(14) Cache Organization
+
+* How to determine a hit or a miss?
+* How to determine what to kick out of the cache?
+
+The block size of an L1 cache should be between 32-128 bytes in size to avoid experiencing slowdown due to a high frequency of misses (small cache) or a large amount of irrelevent data to sort through (large cache).
+
+(15) Quiz: Block Size
+
+* 32 kb cache
+* 64 byte block size
+* Program accesses variables x1, x2, ... , xn
+	* Lots of temporal locality
+	* No spatial locality
+
+(64 * 1024) bytes / 32 bytes = 512
+
+The largest N that still results in a high hit rate is 512.
+
+(16) Cache Block Start Addresses
+
+Cache block start addresses are aligned to avoid overlapping data. => 0...63, 64...127, ... etc.
+
+(18) Quiz: Cache Line Sizes
+
+Line sizes should be factor of the total space in a cache so that they may be properly aligned.
+
+(19) Block Offset and Block Number
+
+An address contains two segments: the Block Number and the Block Offset.
+The Block Number denotes which block the data resides in while the Block Offset denotes where in the block the data resides.
+
+(20) Quiz: Block Number
+
+* 32 byte block size
+* 16-bit address: 1111 0000 1010 0101
+
+Block Number: 1111 0000 101
+Block Offset: 0 0101
+
+(21) Cache Tags
+
+Cache tags contain at least part of the Block Number for the data that is held in their respective lines.
+
+(22) Quiz: Cache Tag
+
+A cache tag always contains at least one bit from the Block Number.
+
+(23) Valid Bit
+
+The valid bit in a cache represents whether or not a line in a cache is valid.
+
+(24) Types of Caches
+
+* Fully Associative: Any block can be in any line.
+* Set-Associative: N lines where a block can be.
+* Direct-Mapped: A block can go into 1 line.
+
+(25) Direct Mapped Cache
+
+For a Direct Mapped Cache, an address has three segments: the tag, followed by the index, and then the block offset.
+
+(26) Upside and Downside Direct Mapped Cache
+
+* Look in one place (fast, cheap, energy-efficient)
+* Block must go in one place (conflicts)
+
+(27) Quiz: Direct Mapped Cache 1
+
+* 16 kb Direct-Mapped Cache
+* 256 byte blocks
+* Address of 0x12345678
+
+# Offset Bits = lg(256) = 8
+# Index Bits = lg(16 * 1024 / 256) = lg(64) = 6
+
+Any addresses that have and index of 01 0110 (0x16, 0x56, 0x96, or 0xc6) will conflict with 0x12345678.
+
+(28) Quiz: Direct Mapped Cache 2
+
+Accessed Addresses, In Order:
+0x3F1F 0011 1111 0001 1111
+0x3F2F 0011 1111 0010 1111
+0x3F2E 0011 1111 0010 1110
+0x3E1F 0011 1110 0001 1111
+
+# Offset Bits = lg(32) = 5
+# Index Bits = lg(8) = 3
+
+After the above memory accesses have been completed, Line 0 will contain 0x3F1F and 0x3E1F, while Line 1 will contain 0x3F2F and 0x3F2E.
+
+(29) Set Associative Caches
+
+N-way set-associative => A block can be in one of n lines
+
+(30) Offset, Index, Tag for Set Associative
+
+Offset: Determined by block size
+Index: Determined by the number of sets
+Tag: The remaining bits
+
+(31) Quiz: 2 Way Set Associative
+
+Accessed Addresses, In Order:
+0xF303 1111 0011 0000 0011
+0xF503 1111 0101 0000 0011
+0xF563 1111 0101 0110 0011
+0xEF63 1110 1111 0110 0011
+
+# Offset Bits = lg(32) = 5
+# Index Bits = lg(8 / 2) = lg(4) = 2
+
+After the above memory accesses have been completed, Set 0 will contain 0xF303 followed by 0xF503, and Set 3 will contain 0xF563 followed by 0xEF63.
+
+(32) Fully Associative Cache
+
+There are no index bits in a Fully Associative Cache
+
+(33) Direct Mapped and Fully Associative
+
+Direct Mapped = 1-way set Associative
+Fully Associative = N-way Set Associative where N = # of lines.
+
+(34) Cache Replacement
+
+* Set is full
+* Miss -> Need to put a new block in the set
+* Which block do we kick out?
+	* Random
+	* FIFO
+	* LRU - Least Recently Used
+		* NMRU - Not Most Recently Used
+
+(35) Implementing LRU
+
+In order to determine which line is the least recently used, and LRU counter is employed alongside the cache
+
+(36) Quiz: LRU
+
+* 1 Set (8-way SA)
+
+Accesses, In Order:
+A, B, A, D, K
+
+Initial:
+\tabl{c | c}{
+	Value & LRU Counter \\ \hline
+	A & 7 \\ \hline
+	B & 3 \\ \hline
+	C & 2 \\ \hline
+	D & 6 \\ \hline
+	E & 5 \\ \hline
+	F & 1 \\ \hline
+	G & 4 \\ \hline
+	H & 0 \\
+}
+
+After Accesses:
+\tabl{c | c}{
+	Value & LRU Counter \\ \hline
+	A & 5 \\ \hline
+	B & 4 \\ \hline
+	C & 1 \\ \hline
+	D & 6 \\ \hline
+	E & 3 \\ \hilne
+	F & 0 \\ \hline
+	G & 2 \\ \hline
+	K & 7 \\
+}
+
+(37) Write Policy
+
+Do we insert blocks we write?
+	* Write-allocate (most common)
+	* No-write-allocate
+
+Do we write just to the cache or also to the memory?
+	* Write-through: Update memory immediately
+	* Write-back: Write to cache, write to memory when replaced (most common)
+
+(38) Write Back Caches
+
+Block we did write
+	* Replace -> write to memory
+
+Block we didn't write
+	* Replace -> no need to write
+
+Dirty bit
+	* 0: Block is "clean" (not written since it was last brought from the memory)
+	* 1: Block is "dirty"
+
+(40) Quiz: Write Back Cache
+
+Initial cache line state:
+* Valid bit: 0
+* Dirty bit: 1
+* Tag: A
+
+Accesses mapping to the same line:
+RD A
+RD B
+WR B
+RD C
+RD D
+WR D
+
+Final cache line state:
+* Valid bit: 1
+* Dirty bit: 1
+* Tag: D
+
+Total Misses: 4
+Total write-backs: 1
+
+(43) Quiz: Cache Summary 1
+
+* 256 byte size
+* 32 byte line size
+* 2-way set-associative
+* Write-back
+* write-allocate
+* 32 bit addresses
+
+# Offset Bits = lg(32) = 5
+# Index Bits = lg(256 / 32 / 2) = lg(4) = 2
+# Tag Bits = 32 - (# Offset Bits + # Index Bits) = 32 - 7 = 25
+
+Locations within the tag:
+Offset Bits: bits 0 - 4
+Index Bits: bits 5 - 6
+Tag Bits: 7 - 31
+
+(44) Quiz: Cache Summary 2
+
+* 256 byte size
+* 32 byte line size
+* 2-way set-associative
+* Write-back
+* Write-allocate
+* 32 bit addresses
+
+Memory Acesses, in Order:
+LW 0xBCDE0000 1011 1100 1101 1110 0000 0000 0000 0000
+LW 0xCDEF0000 1100 1101 1110 1111 0000 0000 0000 0000
+SW 0xBCDE0000 1011 1100 1101 1110 0000 0000 0000 0000
+SW 0xCDEF0004 1100 1101 1110 1111 0000 0000 0000 0100
+SW 0xBCDE0000 1011 1100 1101 1110 0000 0000 0000 0000
+
+Total Misses: 2
+Total Write-Backs : 0
+
+Lesson 16: Virtual Memory
+
+(2) Why Virtual Memory
+
+The programmer and the hardware have different views of memory.
+	* The hardware is bound by how much memory is actually available.
+	* The programmer perceives memory as a continuous and, essentially, endless array.
+
+(3) Quiz: Virtual Memory
+
+It is not possible to determine how much memory a system actually has if only the virtual memory is considered.
+
+(4) Processor's View of Memory
+
+Physical Memory: The actual memory modules in a machine
+	* Usually less than what the program can access
+
+Addresses
+	* 1:1 Mapping to bytes/words in physical memory
+
+(5) Program's View of Memory
+
+A program only has access to the virtual memory.
+
+(6) Mapping Virtual to Physical Memory
+
+* A program's virtual memory is divided into pages.
+* The physical memory is divided into frames.
+* The operating system maps pages in virtual memory to blocks in physical memory using a page table.
+
+(7) Quiz: Page Table
+
+* 2 gb physical memory
+* 4 gb virtual memory
+* 4 kb page size
+
+# Frames = (2 * 2^30) / (4 * 2^10) = 2^19 = 524288
+# Page Table Entries = (4 * 2^30) / (4 * 2^10) = 2^20 = 1048576
+
+(8) Where is the Missing Memory
+
+Portions of the virtual memory that cannot fit into physical memory reside on the disk.
+
+(9) Virtual to Physical Translation
+
+* A virtual address has two segments: the virtual page number followed by the page offset.
+* The virtual page number corresponds to a location in the page table which maps to the appropriate frame number in physical memory.
+* The page offset is the same in both the virtual address and its corresponding physical address.
+
+(10) Quiz: Address Translation
+
+* 16 bit virtual address space
+* 20 bit physical address space
+* 4 entry page table
+
+Page Table:
+\tabl{c}{
+	0x1F \\ \hline
+	0x3F \\ \hline
+	0x23 \\ \hline
+	0x17 \\
+}
+
+# Virtual Page Number Bits = lg(4) = 2
+# Page Offset Bits = 16 - Virtual Page Number Bits = 14
+
+Address Mappings:
+\tabl{c | c | c}{
+	0xF0F0 1111 0000 1111 0000 & \Rightarrow & 0x5F0F0 0101 1111 0000 1111 0000 \\ \hline
+	0x001F 0000 0000 0001 1111 & \Rightarrow & 0x7C01F 0111 1100 0000 0001 1111 \\
+}
+
+(11) Size of Flat Page Table
+
+* 1 entry per page in the virtual address space
+	* Even for pages the program never uses
+* Entry Contains frame # and bits that tell us if the page is accessible
+	* Entry Size \approx Physical Address
+
+Overall Size = (Virtual Memory / Page Size) * Size of Entry
+
+(12) Quiz: Flat Page Table Size
+
+* 8 bytes per entry (64 bit physical address space)
+* 4 kb page size
+* Two processes are in the system
+* 2 gb physical memory
+* 32 bit virtual address
+* Process #1 is using only 1 mb of memory
+* Process #2 is using 1 gb of memory
+
+Total Size of Page Tables = 2 * ((2^32 / (4 * 2^10)) * 8) = 16 * 2^20 = 16 mb
+
+(13) Multi Level Page Tables
+
+Flat page table size 'approx address space
+	* 32 bit virtual address => Several mb
+	* 64 bit virtual address => too big
+
+Virtual Address Space
+	* Many pages are unused
+
+Multi-level page table
+	* Uses bits from the virtual address to index tables
+	* avoids the use of table entries for unused space
+
+(14) Multi Level Page Table Structure
+
+* The page number in the virtual address is segmented into two parts: the *outer page number* and the *inner page number*
+* Outer page number: points to the correct inner page table
+* Inner page number: points to the correct entry within the inner page table
+
+(16) Two Level Page Table Size
+
+* 32 bit address space
+* 4 kb page
+* 1024 entry outer page table
+* 1024 entry inner page tables
+* 8 bytes per entry
+* The Program uses virtual memory at 0 ... 0x00010000 and 0xFFFF0000 ... 0xFFFFFFFF (The outer page numbers are 0000 0000 00 and 1111 1111 11)
+
+# Outer Page Number Bits = lg(1024) = 10
+# Inner Page Number Bits = lg(1024) = 10
+# Page Offset Bits = 32 - (Outer Page Number + Inner Page Number) = 12
+
+Flat Page Table Size = (2^32 / (4 * 2^10)) * 8 = 2^20 * 8 = 8 mb
+
+Outer Page Table Size = 2^10 * 8 = 8 kb
+# Inner Page Tables = 2 (From the number of outer page numbers)
+Inner Page Table Size = 2^10 * 8 = 8 kb
+2-Level Page Table Size = Outer Page Table Size + (# Inner Page Tables * Inner Page Table Size) = 24 kb
+
+(17) Quiz: 4-Level Page Table
+
+* 64 bit virtual address space
+* 64 kb page size (2^16)
+* 8 bytes page table entry
+* The program only uses addresses 0 ... 4 gb (2^32)
+* has a 4-level page table
+
+Flat Page Table Size = (2^64 / (2^16)) * 8 = 2^48 * 8 = 2^51 bytes
+
+# Inner/Outer Page Number Bits = lg(2^64 / (2^16)) / # Levels = 48 / 4 = 12
+# Innermost Page Tables = (2^32 / 2^16) / 2^(#Inner Page Number Bits) = 2^16 / 2^12 = 2^4 = 16
+Page Table Size = (2^# Inner Page Number Bits) * Entry Size = 2^12 * 8 = 32 kb
+Total Size = (# Non-Innermost Page Tables * Page Table Size) + (# Innermost Page Tables * Page Table Size) = (3 * 32 kb) + (16 * 32 kb) = 608 kb
+
+(18) Choosing The Page Size
+
+Smaller Pages
+	* Larger page tables
+
+Larger Pages
+	* Smaller page table
+	* Internal fragmentation
+
+Compromise
+	* A few kb to a few mb
+
+(19) Memory Access Time wit V-P Translation
+
+For load/store:
+	* Compute virtual address
+	* Compute page number
+	* Compute physical address of page table entry
+	* Read page table entry
+	* Compute physical address
+	* Access cache (and sometimes memory)
+
+(20) Quiz: V-P Translation 1
+
+* 1 cycle to compute virtual address
+* 1 cycle to access cache
+* 10 cycles to access memory
+* 90% hit rate for data
+* Page table enries not cached
+
+Cycles for LW R1,4(R2) = 1 + (3 * 10) + 1 + (0.1 * 10) = 33 cycles
+
+(21) Quiz: V-P Translation 2
+
+* 1 cycle to compute virtual address
+* 1 cycle to access cache
+* 10 cycles to access memory
+* 90% hit rate for data
+* Page table enries may be cached
+
+Cycles for LW R1,4(R2) = 1 + 3 * (1 + 0.1 * 10) + 1 + (0.1 * 10) = 9 cycles
+
+(22) Translation Look Asid Buffer
+
+* The TLB is a cache for translations
+* Cache is big, but the TLB is small
+* The cache is acccessed for each level of page tables, but the TLB only stores the final translation
+
+What is we have a TLB miss?
+	* Perform the translation using page table(s)
+	* Put the translation in the TLB
+
+(23) Quiz: What if We Have a TLB Miss?
+
+There are two ways that a TLB miss may be handled
+	* Software TLB miss handling
+		* Lets the operating system use any data structure to represent the page table.
+	* Hardware TLB miss handling
+		* Requires more hardware, but it is faster.
+
+(24) Quiz: TLB Size
+
+* 32 kb cache
+* 64 b block size
+* 4 kb page size
+
+In order to have a similar hit rate between cache and the TLB, we will need a TLB that will have enough entries to match the cache's capacity, and we will at most need a TLB with one entry per block in the cache.
+
+Minimun Number of Entries = 32 kb / 4 kb = 8 entries
+Maximum Number of Entries = (32 kb / 64 b) = 512 entries
+
+(25) TLB Organization
+
+* Associativity: Fully or highly associative
+* Size: Two level TLB
+	* L1: Small and fast
+	* L2: Larger and slower
+
+(26) Quiz: TLB Performance
+
+* 1 mb array, read one byte at a time from start to end, do this 10 times
+* No other memory is accessed
+* 4 kb page
+* 128 entry L1 TLB
+* 1024 entry L2 TLB
+* The TLBs are inirially empty
+* The array is page-aligned
+* The TLBs are direct-mapped
+
+# Pages in Array = 1 mb / 4 kb = 256 pages
+
+L1 TLB Hits = 10 * (2 kb - 1) * 256 = 10 * 4095 * 256 = 10483200 hits
+L1 TLB Misses = 10 * 256 = 2560 misses
+L2 TLB Hits = 9 * 256 = 2304 hits (The L2 TLB is only accessed when the L1 TLB experiences a miss)
+L2 TLB Misses = 256 misses
+
+Lesson 17: Advanced Caches
+
+(2) Improving Cache Performance
+
+AMAT (Average Memory Access Time) = Hit Time + Miss Rate * Miss Penalty
+	* Reduce hit time
+	* Reduce miss rate
+	* Reduce miss penalty
+
+(3) Reduce Hit Time
+
+* Reduce cache size (bad for miss rate)
+* Reduce cache associativity (bad for miss rate)
+* Overlap cache hit with another hit
+* Overlap cache hit with TLB hit
+* Optimize lookup for common case
+* Maintain replacement state more quickly
+
+(4) Pipelined Caches
+
+* Multiple cycles to access the cache
+	* Access comes in cycle N (hit)
+	* Access comes in cycle N + 1 (hit, has to wait)
+
+Hit Time = Actual Hit + Wait Time
+
+(5) TLB and Cache Hit
+
+Physically Indexed - Physically Tagged Cache: A cache that is accessed using a physical address
+
+Overall Hit Latency = Cache Hit Latency + TLB Hit Latency
+
+(6) Virtually Accessed Cache
+
+Virtually Accessed Cache: A cache that is accessed using a virtual address
+
+Pros:
+	* Hit Time = Cache Hit Time
+	* No TLB access on cache hit (saves time and energy)
+		* This advantage doesn't exist on real processors because the TLB still needs to be accessed to obtain permission information about the requested memory location.
+
+Cons:
+	* The cache must be flushed on every context switch
+
+(7) Virtually Indexed - Physically Tagged
+
+Virtually Indexed - Physically Tagged Cache: Sets in the cache are accessed using the index from a virtual address, but the tag check is carried out using the physical tag.
+
+Hit Time = Cache hit time
+
+* The cache does not need to be flushed on a context switch.
+* There are no aliasing problems if the cache is small enough.
+
+(8) Aliasing in Virtually Accessed Caches
+
+Aliasing: When multiple virtual addresses map to the same physical address.
+
+(9) VIPT Cache Aliasing
+
+* There is no aliasing if all the index bits in the physical address come from the page offset.
+
+(10) VIPT Aliasing Avoidance Quiz
+
+* 4 way set-associative (2^2)
+* 16 byte block size (2^4)
+* 8 kb page size (2^13)
+
+Max Cache Size Without Aliasing = 2^13 *2^2 = 2^15 = 32 kb
+
+(11) Real VIPT Caches
+
+Cache size <= Associativity * Page Size
+
+* Pentium 4
+	* 4 way set-associative * 4 kb => L1 is 16 kb
+* Core 2, Hehalem, Sandy Bridge, Haswell
+	* 8 way set-associative * 4 kb => L1 is 32 kb
+* Skylake
+	* 16 way set-associative * 4 kb => 64 kb
+
+(12) Associativity and Hit Time
+
+* High Associativity
+	* Fewer Conflicts (lower miss rate)
+	* Larger VIPT Caches (lower miss rate)
+	* Slower hit time
+
+* Direct Mapped
+	* Higher miss rate
+	* Lower hit time
+
+(13) Way Prediction
+
+* Set-associative cache (lower miss rate)
+* Guess which line in the set is the most likely to hit (lower hit rate)
+* if no hit there, normal set-associative check
+
+(14) Way Prediction Performance
+
+\tabl{c | c | c | c}{
+	& 32 kb, 8way SA & 4 kb Direct Mapped & 32 kb, 8 way SA, Way Pred. \\ \hline
+	Hit Rate & 90% & 70% & 90% \\ \hline
+	Hit Latency & 2 & 1 & 1 or 2 \\ \hline
+	Miss Penalty & 20 & 20 & 20 \\ \hline
+	AMAT & 2 + 0.1 * 20 = 4 & 1 + 0.3 * 20 = 7 & 0.7 * 1 + 0.3 * 2 + 0.1 * 20 = 3.3 \\
+}
+
+(15) Quiz: Way Prediction
+
+A cache with any amount of associativity can benefit from way prediction.
+
+(16) Replacement Policy and Hit Time
+
+* Random: Nothing to update on cache hit
+	* Higher hit rate
+	* Higher miss rate
+
+* LRU
+	* Lower miss rate
+	* Many counters need to be updated on a hit (higher hit latency)
+
+(17) NMRU Replacement
+
+* Not Most Recently Used
+	* Track which block in the set in MRU
+	* On replacement, pick an non-MRU block
+
+* N way Set-Associative Tracking of MRU
+	* One MRU pointer per set
+
+(18) PLRU Replacement
+
+* Pseudo LRU
+	* One bit per line in a set
+	* Each line is marked once it is used
+	* Unmarked lines are selected from randomly for replacement
+	* Once all lines are marked, the markings are all cleared
+
+(19) Quiz: NMRU
+
+* Fully associative cache with 4 lines
+* NMRU replacement
+* Starts out empty
+
+Accessed Blocks, In Order:
+A A B A C A D A E A A A A B
+
+There would be 5-6 misses during the above sequence of memory accesses.
+
+(20) Reducing the Miss Rate
+
+The Causes of Misses:
+	* Compulsory Misses
+		* The first time a block is accessed
+		* Would be a miss in an infinite cache
+	* Capacity Misses
+		* The block was evicted because of limited cache size
+		* Would be a miss even in a fully-associative cache of the same size
+	* Conflict Misses
+		* The block was evicted because of limited associativity
+		* Would not be a miss in a fully-associative cache
+
+(21) Larger Cache Blocks
+
+* More words are brough in when a miss occurs
+	* Lower miss rate when spatial locality is good
+	* Higher miss rate when spatial locality is bad
+
+(22) Quiz: Miss Rate
+
+When the miss rate is reduced by increasing the block size, compulsory misses, capacity misses, and conflict misses are all reduced.
+
+(23) Prefetching
+
+* Guess which blocks will be accessed soon
+* Bring them into the cache ahead of time
+
+* Good Guess => Eliminate a miss
+* Bad Guess => Cache pollution => Another miss
+
+(24) Prefetch Instructions
+
+* PDist: Prefetch Distance (how far ahead elements should be pre-fetched)
+
+What to use as PDist?
+	* Too small  => may prefetch too late
+	* Too large => the element may be evicted before it can be used
+
+(25) Quiz: Prefetch Instructions
+
+* 8 byte array elements (2^3)
+* Cache size 16 kb (2^14)
+* Fully associative
+* LRU
+* A single iteration of the inner loop takes 10 cycles of there are no misses (hit latency)
+* Miss penalty of 200 cycles (memory latency)
+
+Max # Elements in Cache = 2^14 / 2^3 = 2048
+PDist = Memory Latency / Hit Latency = 200 / 10 = 20
+
+for(i = 0; i < 1000; i++)		\* Elements should be prefetched starting at a[i + 1] *\
+	for(i = 0; i < 1000; i++)	\* Elements should be prefetched starting at l[i][j + 20] *\
+		a[i] += l[i][j]
+
+(26) Hardware Prefetching
+
+* No change to the program
+* Hardware tries to guess what will be accesses soon
+
+* Stream Buffer - sequential.
+* Stride Prefetcher - If memory accesses are at a fixed distance, prefetches based on that distance.
+* Correlating Prefetcher - If a pattern of memory accesses is established, prefetching follows the pattern.
+
+(27) Loop Interchange
+
+Groups loops together that use the same block in memory, thus improving locality and prediction accuracy.
+
+(28) Overlap Misses
+
+Exploits memory-level parallelism to dramatically reduce the effective miss penalty.
+
+* Hit under a miss
+* Miss under a miss
+
+(29) Miss Under Miss Support in Caches
+
+* Miss Status Handling Registers (MSHRs)
+	* Info about ongoing misses
+	* Check MSHRs to see if there is any match
+
+Miss
+	* No match => Allocate an MSHR, and remember whern to wake up
+
+Half-Miss
+	* Match => Add the instruction to MSHR
+		* When data comes back, eake up all the instructions it has, and release the MSHR
+
+How Many MSHRs Are Ideal?
+	* 2 is good, 4 is better, 16-32 is great
+
+(30) Quiz: Miss Under a Miss
+
+Any application that experiences misses can benefit from miss-under-miss support if the miss interval is not longer than the miss penalty.
+
+(31) Cache Hierarchies
+
+* Reduce hit time
+* Reduce miss rate
+* Reduce miss penalty
+	* Overlap Multiple misses
+	* Multi-level caches (cache hierarchy)
+		* Miss in L1 cache goes to another cache
+		* L1 miss penalty != memory latency
+		* L1 miss penalty = L2 hit time + L2 miss rate * L2 miss penalty
+
+(32) AMAT With Cache Hierarchies
+
+AMAT(N) = if(LN is LLC){
+	return LLC Hit Time + LLC Miss Rate * LLC Miss Penalty
+}else{
+	return LN Hit Time + AMAT(N + 1)
+}
+
+LN Miss Penalty = Main Memory Latency
+	* LN is the last level cache (LLC)
+
+(33) Quiz: L1 vs L2
+
+The L1 capacity and latency are less than the L2 capacity and latency, but the number of accesses to L1 is equal to or greater than the number of accesses to L1.
+
+(34) Multilevel Cache Performance
+
+\tabl{c | c | c | c | c}{
+	& 16 kb & 128 kb & no cache & L1 = 16 kb, L2 = 128 kb \\ \hline
+	Hit Time & 2 & 10 & 100 & 2 for L1, 12 for L2 \\ \hline
+	Hit Rate & 90% & 97.5% 100% & 90% for L1, 75% for L2 \\ \hline
+	AMAT & 2 + 0.1 * 100  = 12 & 10 + 0.025 * 100 = 12.5 & 100 & 2 + 0.1 * (10 + 0.25 * 100) = 5.5 \\
+}
+
+(35) Hit Rate in L2, L3, Etc.
+
+Local Hit Rate: The hit rate in a lower level cache.
+	* Lower than if it were used alone.
+
+(36) Global vs Local Hit Rate
+
+Global Hit Rate = 1 - Global Miss Rate
+Global Miss Rate = # of Misses in This Cache / # of All Memory References
+Local Hit Rate = # of Hits / # of Accesses to this cache
+Misses per 1000 instructions (MPKI)
+	* Normalizes with number of instructions
+
+(37) Quiz: Global and Local Miss Rate
+
+* L1 cache has a 90% hit rate
+	* Local Miss Rate = 10%
+	* Global Miss Rate = 10%
+
+* L2 Cache hits for 50% of L1 misses
+	* Local Miss Rate = 50%
+	* Global Miss Rate = 10% * 50% = 5%
+
+(38) Inclusion Property
+
+* Block is in L1 Cache
+	* May or may not be in L2
+	* Has to also be in L2 (inclusion)
+	* Cannot also be in L2 (exclusion)
+
+Inclustion and exclusion must be deliberately implemented
+
+(39) Quiz: Inclusion
+
+* L1 and L2 maintain the inclusion property
+	* Dirty block replaced from L1 => write back
+	* Write back may be an L2 hit only.
+
+* L1 and L2 make no attempt at maintaining inclusion
+	* Dirty block replaced from L1 => write back
+	* Write back may be an L2 hit or miss.
+
+Lesson 19: Memory
+
+(2) How Memory Works
+
+* Memory Technology: SRAM and DRAM
+* Why is memory slow?
+* Why don't we use cache-like memory?
+* What Happens when we access main memory?
+* How do we make it faster?
+
+(3) Memory Technology: SRAM and DRAM
+
+SRAM - Static Random Access Memory
+	* Retains data while power is supplied
+	* Several transistors are needed per bit
+	* Faster
+	* Larger memory cells
+
+DRAM - Dynamic Random Access Memory
+	* Will lose data is it is not refreshed
+	* One transistor is needed per bit
+	* Slower
+	* Smaller memory cells
+
+(4) One Memory Bit SRAM
+
+	* One wordline, two bitlines
+	* The wordline activates two transistors that will connect the memory cell to bitlines which will then read or write the data.
+	* The memory cells consists of a feedback-loop between two inverters.
+	* The two bitlines are complimentary to one another and are on oposite sides of the feedback loop. in doing so, they amplify each other's signal to overcome and write to the memory cell.
+
+(5) One Memory Bit DRAM
+
+	* One wordline, one bitline, one capacitor.
+	* The wordline activates a transistor that will connect the capacitor to the bitline which will then read or write the data.
+	* The Capacitor loses its charge over time, thus the data bit is degraded over time.
+	* Destructive read => Read then write
+
+(6) Quiz: DRAM Technology
+
+	A trench cell is used in DRAM as opposed to a normal transistor/capacitor combo because tranch cells result in cheaper DRAM chips due to their smaller size.
+
+(7-8, 10) Memory Chip Organization
+
+Row Decoder: Determines which wordline is activated based on input bits, thus connects those wordlines to the appropriate bitlines
+
+Sense Amplifier: Amplifies the changes due to reading memory cells on a bitline.
+
+Row Buffer: Stores the values read from the memory cells
+
+Column Decoder: Selects the correct bit(s) from the Row Buffer based on the input column address
+
+Order of operation:
+Decode Row -> Activate Wordlines -> Expose Bitlines to Memory Cells -> Amplify Sense -> Store in Row Buffer -> Decode Column -> Output Bit(s)
+
+DRAM Memory Operations:
+	* Destructive read =>  Read then write
+	* Write => Read the write
+
+* Refresh
+	* Refresh row counter
+	* Refresh period T
+	* N rows
+	* Refresh every T/N seconds
+	* Significantly interferes with when reads and writes can occur
+
+(9) Quiz: Memory Refresh
+
+* Memory has 4096 rows, 2048 columns
+* Refresh period is 500 microseconds
+* Read Timing:
+	1. 4 ns to select a row
+	2. 10 ns for sense amplifier to ger bit values
+	3. 2 ns to put data in the row buffer
+	4. 4 for column decoder
+	5. 11 ns to write data from sense amplifier to memory row (overlaps with 3 and 4)
+
+Refresh Interval = 4 + 10 + 11 = 25 ns
+Non-Refresh Reads per Second = 1 / (25 * 10^-9) = 40 M
+Refreshes per Second = 1 / (500 * 10^-6) * # Rows = 2000 * 4096 = 8.192 M
+Actual Reads per Second = Non-Refresh Reads per Second - Refreshes per Second = 40 M - 8.192 M = 31.808 M
+
+(11) Fast Page Mode
+
+Open a page
+	* Provide row addr
+	* Select row
+	* sense amp
+	* latch into row buf
+
+Read/Write
+	* Do operations in the row buffer
+
+Close the page
+	* Write the data from the row buffer to memory row
+
+(12) Quiz: DRAM Access Scheduling
+
+* DRAM has 32 1 bit arrays
+* Each array is 16 mb: 2^12 rows * 2^12 columns (12 bits for row/column addresses)
+* Page open 10 ns
+* Read from row buf 2ns
+* Page close 5 ns
+* Cache misses for: (# Lines = 7)
+	F00 F00
+	E00 F00
+	F00 E04
+	E04 F00
+	E00 E00
+	F00 123
+	123 F00
+
+Time Spent Processing Misses in Order = 7 * (10 + 2 + 5) ns = 7 * 17 ns = 119 ns
+Time Spent Processing Misses in Best Order = (10 + (3 * 2) + 5) + (10 + (2 * 2) + 5) + 17 + 17 ns = 74 ns
+
+(13) Connecting DRAM to the Processor
+
+Processor -> L1 -> L2 -> ... -> LN -> Front-Side Bus -> Memory Controller -> Memory Channel(s) -> DRAM Memory Module(s)
+
+* Recent processor chips put the memory controller on the same chinp as the processor to drastically reduce memory access latency.
+
+Lesson 20: Storage
+
+* Files - Programs, data, settings
+* Virtual memory
+
+* Performance
+	* Throughput (Improving more slowly than processor speed)
+	* Latency (Improving very slowly, even moreso than DRAM)
+
+* Reliability
+
+* Diverse Types of Storage
+	* Magnetic Disks
+	* Optical Disks
+	* Tape
+	* Flash
+
+(3) Magnetic Disks
+
+* Platters are attached to a rotating spindle.
+* Data bits are on the top and bottom surfaces.
+* The head assembly is moved above the surface to read/write data.
+* The heads are moved to access different "tracks" of data.
+* Data is stored on sectors of the hard disk.
+* Each sector begins with a preamble and ends with a checksum.
+
+Disk Capacity = (# of Platters * 2) * (Tracks / Surface) * (Sectors / Track) * (Bytes / Sector)
+
+(4) Access Time for Magnetic Disks
+
+Seek Time: Move the head assembly to the correct cylinder
+Rotational Latency: Wait for the start of the sector to get under the head
+Data Read: Read until the end of the sector seen by the head
+Controller Time
+I/O Bus Delay
+Queuing Delay
+
+(5) Quiz: Disk Access Time
+
+* 1000 cylinders. 10 sectors/track
+* Head assembly at cylinder 0 initially
+* Head moves 10 microseconds/cylinder (10^-6)
+* Disk rotates 100 times/second (10 ms)
+* No controller, I/O bus, or queuing delay
+
+Average Seek Time = (1000 / 2) * 10^-6 = 5 ms
+Rotational Latency = (10 ms / 2) = 5 ms
+Read Latency: (10 ms / 10 sectors per track) = 1 ms
+
+Average Time to Read a Byte = 5 + 5 + 1 ms = 11 ms
+
+(6) Trends for Magnetic Disks
+
+* Capacity: 2x per 1-2 years
+* Seek Time: 5 - 10ms (very slow improvement)
+* Rotation:
+	* 5000 rpm => 10000 rpm => 15,000 rpm
+	* Improves slowly
+	* Materials
+	* Noise
+* Controller, bus
+	* Improves at an okay rate
+
+(7) Optical Disks
+
+* Smudges and dust are less of a problem than for hard disks
+* CDs, DvDs
+* Standardization
+	* Limits rate of improvement
+	* Technology improves => Standard Process => Products
+
+(8) Magnetic Tape
+
+* Backup (Secondary Storage)
+* Large Capacity
+* Replaceable
+* Sequential Access
+* Dying out
+	* Low Priduction Volume => Costs not dropping as rapidly as disks
+	* Cheaper to use disks => usb drives
+
+(9) Quiz: Disks and Tape
+
+A disk is more ideal for non-sequential data than tape is.
+
+(10) Using RAM for Storage
+
+* Disks are about 100x cheaper/GB
+* DRAM has about 100,000x better latency
+
+Solid-State Drive (SSD)
+	* DRAM + Battery
+		* Fast
+		* Reliable
+		* Expensive
+		* Not good for archiving
+	* Flash
+		* Low power
+		* Fast (slower than DRAM)
+		* Smaller capacity (gb vs tb)
+		* Keeps data without power
+
+(11) Hybrid Magnetic Flash
+
+* Magnetic Disk
+	* Low unit price
+	* Huge capacity
+	* Power hungry
+	* Slow (mechanical movement)
+	* Sensitive to impacts while spinning
+* Flash
+	* Fast
+	* Power efficient
+	* No moving parts
+
+* Use both
+	* Use flash as cache for the disk
+
+(12) Quiz: Flash vs Disk vs Both
+
+* Do the following 4 times:
+	* Play game for 2 hours (read 2 gb, write another 10 mb)
+	* Watch movie for 2 hours (read 1 gb sequentially)
+* Disk 100 mb/s seq. 1 mb/s random
+* flash 1 gb/s
+
+Disk Access Time = 4 * (2 / .1 + .01 / .001 + 1 / 0.1) s = 4 * (20 + 10 + 10) s = 160 s
+Flash Access Time = 4 * (2 + 0.01 + 1) / 1 = 12.04 s
+Disk + 4 GB Flash = 160 / 4 + 12.04 s = 52.04 s
+
+(13) Connecting I/O Devices
+
+* Bus
+	* Standards => Limited rete of improvement
+	* Improvement happens in steps
+* Mezzanine bus (PCI Express)
+	* Prettey fast, short
+	* Directly conect fast devices (graphics)
+* SATA, SCSI Sontroller => SATA bus
+	* Slower
+	* Less change
+* USB Hub => USB bus
+
+Lesson 21: Fault Tolerance
+
+(2) Dependability
+
+Quality of Delivered Service that justifies trlying on the sustem to provide that service.
+
+Specified Service: What behavior should be
+Delivered Service: Actual Behavior
+
+System has components (modules)
+Each module has an idspecified behavior
+
+(3) Faults, Errors, and Failures
+
+Fault: Module deviates from specified behavior
+Error: Actual behacior within system differes from specified behavior
+Failure: System deviates from specified behavior
+
+(4) Fault, Error and Failur Example
+
+Fault Example:
+	* Add function that works fine, except 5 + 3 = 7 (should be 8)
+	* Latent error
+* Error: (activated fault, effective error
+	* We call add with 5 and 3, get 7 and put it in some variable)
+* Failure: (deviation in system behavior)
+	* Schedule a meeting for 7 am instead of 8 am
+
+(5) Quiz: Laptop Falls Down
+
+Laptop
+	1. Falls out of my bag and 
+	2. Hits pavement
+	3. Develops a crack, then
+	4. Crack expands during winter, so pavement
+	5. Breaks, and
+	6. Needs to be replaced
+
+For the pavement, failure is event 6, fault is event 2, and the first error is event 3.
+
+(6) Reliability, Availability
+
+* System in one of two states:
+	* Service accomplishment
+	* Service interruption
+
+* Reliability
+	* Measures continuous service accomplishment
+	* Mean Time to Failure (MTTF)
+
+* Availability
+	* Service accomplishment as a fraction of overall time
+	* Mean Time to Repair (MTTR)
+
+Availability = MTTF / (MTTF + MTTR)
+
+(7) Quiz: Reliability and Availability
+
+* Hard Disk
+	* Works fine for 12 months
+	* Breaks (can't spin), takes 1 month to replace motor
+	* Works fine for 4 months
+	* Breaks (can't move heads), takes 2 months to unstuck
+	* Works fine fo 14 months
+	* Breaks (head broken), would take 3 months to fix
+	* Throw away, buy new disk
+
+MTTF = (12 + 4 + 14) / 3 = 10 months
+MTTR = (1 + 2 + 3) / 3 = 2 months
+Availability = MTTF / (MTTF + MTTR) = 10 / (10 + 2) = 83.3%
+
+(8) Kinds of Faults
+
+Classify by Cause
+	* HW Faults: Hardware fails to perform as designed
+	* Design Faults: SW bugs, HW design mistakes, FDIV bug, etc.
+	* Operating Faults: Operator/User mistakes
+	* Environmental Faults: Fire, power, fails, etc.
+
+Classify by Duration
+	* Permanent: Once it occurs, it cannot get corrected
+	* Intermittent: Occurs periodically
+	* Transient: Occurs once, but is resolved
+
+(9) Quiz: Fault Classification
+
+* Phone gets wet, heats up, explodes
+
+* "Got wet" is a transient and operational fault.
+* If the phone was supposed to prevent itself from operating when wet, heating up is the result of a transient and hardware fault.
+
+(10) Improving Reliability and Availability
+
+* Fault Avoidance
+	* Prevent faults from occurring
+* Fault Tolerance
+	* Prevent faults from becoming failures
+* Speed up Repair
+
+(11) Fault Tolerance Techniques
+
+* Checkpointing
+	* Save state
+	* Detect errors => restore state
+
+* 2-way redundancy
+	* Two modules do the same work, compare
+	* Roll back if different
+
+* 3-way redundancy
+	* 3 modules (or more) do same work, vote
+	* Expensive
+	* Can tolerate any fault in one module
+
+(12) N-Module Redundancy
+
+* N = 2 Dual-Module Redundancy
+	* Detect but not correct 1 faulty module
+* N = 3 Triple-Module Redundancy
+	* Correct 1 faulty module
+* N = 5 Example: Space Shuttle
+	* 5 computers, vote
+	* One wrong result in a vote => normal operation
+	* Two wrong results in a vote => abort mission
+
+(13) Quiz: N Module
+
+* Have a computer, want to tolerate faults
+* Buy 2 more just like it, put on same desk
+* Run every computation on all 3 computers, compare results, take result ehrer >= 2 agree
+
+In the above scenario, we would be able to tolerate faults that are not a result of things that the computers have in common, like location or processor design.
+
+(14) Fault Tolerance for Memory and Storage
+
+* DMR, TMR: overkill
+* Error Detection, Correction Codes
+	* Parite: One extra bit (XOR of all data bits)
+	* ECC: SECDED (Single error correction, double error detection)
+	* Disks use even fancier techniques
+* RAID
+
+(15) RAID
+
+* Several disks playing the role of one disk
+* Each disk detect errors using codes
+	* Know which disk has an error
+* RAID should
+	* Improve performance
+	* Normal read/write accomplishment even when
+		* Bad sector
+		* Entire disk fails
+
+* RAID 0, RAID 1, ...
+
+(16) RAID 0
+
+Uses striping to improve performance
+
+* Performance:
+	* 2x data throughput
+	* Less queuing delay
+* Reliability
+	* Worse than 1 disk
+
+(17) RAID 0 Reliability
+
+* f - Failure rate for a single disk
+	* Failures/disk/second
+* Single Disk
+	* MTTF1 = MTTDL1 = 1/f
+* N Disks in RAID 0
+	fn = N * f1 => MTTFN = MTTDLN = MTTF1/N
+
+2 Disks => MTTF2 = MTTF1/2
+
+(18) Quiz: RAID 0
+
+* RAID 0 array with four disks
+* One disk: 200 gb, 10 mb/s throughput, MTTF = 100,000 h
+
+Our RAID 0 Array:
+	* Can store 800 gb
+	* Throughput = 40 mb/s
+	* MTTF 25000 h
+
+(19) RAID 1 Mirroring
+
+* Same data on both disks
+	* Write: write to each disk
+		* Same performance as 1 disk alone
+	* Read: read any one disk
+		*2x throughput of one disk alone
+	* Tolerate any faults that affect 1 disk
+
+(20 - 21) RAID 1 Reliability
+
+* f - failure rate for a single disk
+* Single Disk MTTF = 1/f
+* Both disks are ok for MTTF1/2
+* 2 Disks in RAID 1
+	* fN = N * f1 =>  Both disks are ok until MTTF/2 remaining disk lives on for MTTF
+* Probability of a second disk failing during MTTR1 = MTTR1/ MTTF1
+
+MTTDL_RAID1-2 = (MTTF1 / 2) * (MTTF1 / MTTR1)
+
+(22) Quiz: RAID 1
+
+* RAID 1 array with two disks
+* One disk: 200 gb, 10 MB/s throughput, MTTF = 100000 h
+* We replace a failed disk, MTTR = 24 h
+
+Our RAID 1 Array:
+	* Data Capacity = 200 gb
+	* Throughput = (1/3) * 20 + (2/3) * 10 = 13.33 s
+	* MTTF = (100000 / 2) * (100000 / 24) = 50000 * 4166.66 = 208333333 h
+
+(23) RAID 4
+
+Block-Interleaved Parity
+	* N disks
+	* N-1 disks cotainr data, striped like RAID 0
+	* 1 disk has parity blocks
+	* Write: Write 1 data disk & parity disk read & write
+	* Read: Read data disk(s)
+
+(24) RAID 4 Performance and Reliability
+	* Reads: Throughput of N-1 disks
+	* Writes: 1/2 throughput of 1 disk
+	* MTTF
+		* All disks ok of MTTF1/N
+			* No repair => + MTTF1/(N - 1) (bad idea)
+			* Repair => (MTTF1/(N - 1)) / MTTR1
+
+MTTF_RAID4 = (MTTF1 * MTTF1) / (N * (N - 1) * MTTR1)
+
+(25) RAID 4 Write
+
+* Parity is a bottleneck for writes => RAID5
+
+(26) Quiz: RAID 4
+
+* RAID4 array with 5 disks
+* One disk: 200 gb, 10 MB/s throughput, MTTF = 100000 h
+* We replace a failed disk, MTTR = 24 h
+
+Our 5 Disk RAID 4 Array Has:
+	* Data Capacity: 800 gb
+	* Throughput: (1 / 9) * 40 + (8 / 9) * 5 = 8.89 mb/s
+	* MTTF: (100000 * 100000) / (5 * 4 * 24) = 20833333 h
+
+(27) Quiz: Parity
+
+* Parity to detect bit flit errors in our DRAM memory
+* Unprotected: Eight 1 bit 1024 * 1024 array
+* Want to add a parity bit for each 4 data bits
+
+It is best to keep the parity separate from the rest of the data so that the parity bits will not become corrupted if an array fails.
+
+(28) RAID 5
+
+Distributed Block-Interleaved Parity
+	* Like RAID 4, but the parity is spread among all disks
+	* Read performance: N * throughput of 1 disk
+	* Write performance: N / 4 throughput of 1
+	* Reliability: Same as RAID 4
+
+(29) Quiz: RAID 5
+
+* RAID array with five disks
+* One disk: 200 gb, 10 MB/s throughput, MTTF = 100000 h
+* We replace a failed disk, MTTR = 24 h
+
+Our 5 Disk RAID 5 Array Has
+	* Data Capacity = 800 gb
+	* Throughput =  (1 / 5) * 50 + (4 / 5) * 12.5 = 20 mb/s
+	* MTTF = (100000 * 100000) / (5 * 4 * 24) = 20833333 h
+
+(30) RAID 6
+
+* Two "parity" blocks/group
+	* Can work when 2 failed stripes/group
+	* One parity block
+	* Second is a different type of check-block
+	* When 1 disk fails, use parity
+	* When 2 disks fail, solve equations
+
+RAID 5 vs RAID 6
+	* 2x overhead
+	* More write overhead (6/wr vs 4/wr)
+	* Disk fails, then another fails before we replace the first.
+
+(31) RAID 6 is an Overkill
+
+* RAID 5: Disk fails, 3 day to replace
+	* very low probability of another failing in those 3 days (assuming independent failure)
+
+* Failures can be related
+	* RAID 5, 1 disk fails (#2)
+	* System says "Replace disk #2"
+	* Operator gets replacement disk
+	* But numbering was 0, 1, 2, 3, 4
+	* Now there are two failed disks!
+
+Lesson 22: Multi-Processing
+
+(2) Flynn's Taxonomy of Parallel Machines
+
+* How many instruction streams
+* How many data streams
+
+SISD: Single Instruction, Single Data
+SIMD: Single Instruction, Multiple Data
+MISD: Multiple Instruction, Single Stream
+MIMD: Multiple Instruction, Multiple Stream
+
+(3) Why Multiprocessors
+
+* Uniprocessor Aready \approx 4-widw
+	* Dimishing rerurns from even wider
+	* Raise frequency => raise voltage => raise power
+	* Moore's law continues
+		* 2x transistors every 18 months
+		* 2x cores every 18 months 
+		* \approx 2x performance every 18 months (assuming we can use all the cores)
+
+(4) Quiz: Multicore vs Single Core
+
+* Old: 2 cm^2, IPC = 2.5, 100 w @ 2 GHz
+* New: 1 cm^2, IPC = 2.5, 50 w @ 2 GHz
+	* Better Single Core: 2 cm^2, IPC = 3.5, 75 w @ 2 GHz
+	=> 100 w @ 2.2 (root(3, 1.33) * 2) GHz, speedup vs old = ((2.2 / 2) * (3.5 / 2.5)) 1.54
+	* Two Cores: 2 cm^2, IPC=2.5 on each core, 2 * 50 w @ 2 GHz
+	=> Speedup vs old = 2, assuming old work can simply be divided among cores
+
+(5) Multiprocessor Needs Parallel Programs!
+
+* Sequential (Single-Threaded) code is a lot easier to develop
+* Debugging parall code is much more difficult
+* Performance scaling is very hard to get
+
+(6) Centralized Shared Memory
+
+* Multi-core
+* UMA: Uniform memory access (time)
+* SMP: Symmetric Multiprocessor
+
+(7) Quiz: Multicore
+
+* Want a lot of cores with centralized shared memory.
+
+Problems:
+	* The memory will need to be large (and slow)
+	* The memory gets too many accesses/second
+
+(8) Centralized Main Memory Problems
+
+* Memory size
+	* Need Large memory => Slow memory
+* Memory bandwidth
+	* Misses from all cores => Memory bandwidth contention
+
+Works well ony for smaller machines (2, 4, 8, 16 cores)
+
+(9) Distributed Shared Memory
+
+* One core can access a memory slice (others cannot)
+* Communicate between cores with message passing
+
+Also known as a multi-computer or cluster
+
+(10) Quiz: Numa Memory Allocation
+
+In a NUMA system, the operating system should put the stack pages for core N in the memory slice N, and it should put all data pages mostly accessed by core N in the memory slice N.
+
+(14) Quiz: Message Passing vs Shared Memory
+
+* One core initializes an array , then all others read the entire array
+	* Data distribution lines of code 
+		* Message passing > shared memory
+	* Synchronization adds how many lines?
+		* Message passing = 0 lines
+		* Shared memory > 0 lines
+
+(15) Shared Memory Hardware
+
+* Multiple cores share physical address space
+	* UMA, NUMA
+* Multi-threading by time-sharing a core
+	* same core => same physical memory
+* Hardware multithreading in a core
+	* Coarse-grain: Change thread every few cycles
+	* Fine-grain: Change thread every cycle
+	* Simultaneous multi-threading (SMT)
+		* Hyperthreading
+
+(17) Quiz: SMT vs Dual Core
+
+* Floating-point intensive thread
+* Integer-only thread
+* 4-issue core, 2 FP + 2 int/cycle
+
+In the above scenario, an SMT machine would get more performance than a two core machine.
+
+(18) SMT Hardware Changes
+
+An SMT machine needs multiple program counters, RATs, and ARFs.
+
+(19) SMT, D$, TLB
+
+VIVT Cache => wrong data
+VIPT or PIPT Cache => TLB must be thread-aware
+
+(20) SMT and Cache Performance
+
+* Cache shared by all SMT threads
+* Fast data sharing
+* Cache capacity (and associativity) shared
+	* If cache is too small => cache thrashing
+
+(21) Quiz: SMT and Cache
+
+* Program A: working set 10 kb
+* Program B: working set 4 kb
+* Program C: working set 1 kb
+* Processor 4 way SMT, 8 kb data L1 cache
+
+In the above scenario, it makes the most sense to run program A, then B and C together.
+
+Lesson 24: Cache Coherence
+
+
